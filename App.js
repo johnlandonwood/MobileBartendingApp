@@ -1,14 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import LoginForm from './frontend/LoginForm';
+import RegistrationForm from './frontend/RegistrationForm';
 import TestButton from './frontend/TestButton';
 
 export default function App() {
   return (
       <View style={styles.container}>
-        <LoginForm></LoginForm>
-        <Text> Test API call: </Text>
-        <TestButton></TestButton>
+        {/* <LoginForm></LoginForm> */}
+        <RegistrationForm></RegistrationForm>
+        {/* <Text> Test API call: </Text>
+        <TestButton></TestButton> */}
         <StatusBar style="auto" />
       </View>
   );

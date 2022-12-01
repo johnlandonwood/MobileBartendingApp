@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, TextInput, Button } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { registerNewUser } from './api/Users';
 
 const RegistrationForm = () => {
 
@@ -13,11 +14,15 @@ const RegistrationForm = () => {
         email: '',
         password: '',
         phone_number: '',
-        user_type: '', 
-        date_of_birth: '' // js date type?
+        user_type: ''
+        // date_of_birth: '' // js date type?
     }
   });
-  const onSubmit = data => console.log(data);
+  const onSubmit = data => {
+
+      console.log(JSON.stringify(data));
+      registerNewUser(data);
+  };
 
   return (
   <View>
@@ -130,7 +135,6 @@ const RegistrationForm = () => {
             selectedValue={value}
             onValueChange={onChange}
             style={styles.input}
-          
         >
             <Picker.Item label="Select a user type..." value=""/>
             <Picker.Item label="Guest" value="Guest"/>
@@ -143,6 +147,8 @@ const RegistrationForm = () => {
     </Controller> 
     {errors.user_type && <Text style={{color: 'red'}}>User type is required.</Text>}
 
+
+        {/* DOB input giving us some trouble. */}
     {/* <Text>selected: {date_of_birth.toLocaleString()}</Text>
     <Controller
       control={control}

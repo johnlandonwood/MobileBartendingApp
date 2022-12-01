@@ -9,7 +9,7 @@ mongoose.connect(url).then(() => {
     const app = express();
 
     app.use(express.json());
-    app.use('/account', userRoutes);
+    app.use('/accounts', userRoutes);
 
     app.listen(5000, () => {
         console.log("Server has started!");

@@ -17,7 +17,6 @@ const RegistrationForm = () => {
         date_of_birth: '' // js date type?
     }
   });
-  const [pickerOption, setPickerOption] = useState();
   const onSubmit = data => console.log(data);
 
 
@@ -120,7 +119,7 @@ const RegistrationForm = () => {
     </Controller> 
     {errors.phone_number && <Text style={{color: 'red'}}>Phone number is required.</Text>}
 
-        {/* Need to figure out how to incorporate a picker with react hook from */}
+    <Text>User Type</Text>
     <Controller
       control={control}
       rules = {{
@@ -128,14 +127,13 @@ const RegistrationForm = () => {
       }}
       render={({ field: { onChange, value } }) => (
         <Picker
-            selectedValue={"A"}
-            onValueChange={(itemValue, itemIndex) =>
-                setPickerOption(itemValue)
-            }
+            selectedValue={value}
+            onValueChange={onChange}
+            style={styles.input}
         >
-            <Picker.Item label="A" value="A"/>
-            <Picker.Item label="B" value="B"/>
-            <Picker.Item label="C" value="C"/>
+            <Picker.Item label="Guest" value="Guest"/>
+            <Picker.Item label="Bartender" value="Bartender"/>
+            <Picker.Item label="Admin" value="Admin"/>
         </Picker>
       )}
       name="user_type"

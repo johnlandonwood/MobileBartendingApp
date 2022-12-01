@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text, TextInput, Button } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import { Picker } from "@react-native-picker/picker";
-import { useState } from 'react';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const RegistrationForm = () => {
 
@@ -18,7 +18,6 @@ const RegistrationForm = () => {
     }
   });
   const onSubmit = data => console.log(data);
-
 
   return (
   <View>
@@ -124,13 +123,16 @@ const RegistrationForm = () => {
       control={control}
       rules = {{
         required: true,
+        validate: value => value !== ""
       }}
       render={({ field: { onChange, value } }) => (
         <Picker
             selectedValue={value}
             onValueChange={onChange}
             style={styles.input}
+          
         >
+            <Picker.Item label="Select a user type..." value=""/>
             <Picker.Item label="Guest" value="Guest"/>
             <Picker.Item label="Bartender" value="Bartender"/>
             <Picker.Item label="Admin" value="Admin"/>
@@ -140,6 +142,24 @@ const RegistrationForm = () => {
     >
     </Controller> 
     {errors.user_type && <Text style={{color: 'red'}}>User type is required.</Text>}
+
+    {/* <Text>selected: {date_of_birth.toLocaleString()}</Text>
+    <Controller
+      control={control}
+      rules = {{
+        required: true,
+      }}
+      render={({ field: { onChange, value } }) => (
+        <DateTimePicker
+          value={value}
+          onChange={onChange}
+        >
+        </DateTimePicker>
+      )}
+      name="date_of_birth"
+    >
+    </Controller> 
+    {errors.date_of_birth && <Text style={{color: 'red'}}>Date of birth is required.</Text>} */}
 
 
     <Button title="Submit" onPress={handleSubmit(onSubmit)}/>

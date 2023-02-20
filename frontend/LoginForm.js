@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, TextInput, Button,  } from 'react-native';
+import { View, StyleSheet, Text, TextInput, Button } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 
 const LoginForm = () => {

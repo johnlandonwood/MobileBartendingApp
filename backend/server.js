@@ -19,8 +19,10 @@ mongoose.connect("mongodb://"+process.env.COSMOSDB_HOST+":"+process.env.COSMOSDB
  .then(() => {
     console.log('Connection to CosmosDB successful')
     const app = express();
+
     app.use(express.json())
     app.use(express.urlencoded({extended: true}))
+// ?    app.use('/accounts', userRoutes)
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     })

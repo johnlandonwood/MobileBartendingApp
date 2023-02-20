@@ -1,6 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, Text, TextInput, Button } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
+import { CustomButton } from './CustomButton';
+import { SafeAreaView } from 'react-native';
+
+import { CommonStyles, Alert } from './Common';
 
 const LoginForm = () => {
 
@@ -12,9 +16,9 @@ const LoginForm = () => {
   });
   const onSubmit = data => console.log(data);
 
+
   return (
-  <View>
-    <Text>Login</Text>
+  <SafeAreaView style={{backgroundColor: '#EADEDA'}}>
     <Controller
       control={control}
       rules = {{
@@ -27,13 +31,14 @@ const LoginForm = () => {
           value={value} 
           placeholder={"Email"}
           placeholderTextColor={"gray"}
-          style={styles.input}
-        />
+          style={CommonStyles.input}
+        >
+        </TextInput>
       )}
       name="email"
     >
     </Controller> 
-    {errors.email && <Text style={{color: 'red'}}>Email is required.</Text>}
+    {errors.email && <Alert text="Email is required."></Alert>}
     {/* Error messages persist? */}
 
     <Controller
@@ -49,26 +54,20 @@ const LoginForm = () => {
           placeholder={"Password"}
           placeholderTextColor={"gray"}
           secureTextEntry={true}
-          style={styles.input}
+          style={CommonStyles.input}
         />
       )}
       name="password"
     >
     </Controller>
-    {errors.email && <Text style={{color: 'red'}}>Password is required.</Text>}
+    {errors.email  && <Alert text="Password is required."></Alert>}
 
-    <Button title="Submit" onPress={handleSubmit(onSubmit)}/>
-  </View>
+    <CustomButton title="Log In" onPress={handleSubmit(onSubmit)} style={styles.loginButton}/>
+  </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
 });
 
 export default LoginForm;

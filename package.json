@@ -9,6 +9,10 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@azure/cosmos": "^3.17.2",
+    "bcrypt": "^5.1.0",
+    "dotenv": "^16.0.3",
+    "email-validator": "^2.0.4",
     "@azure/msal-node": "^1.15.0",
     "@expo/webpack-config": "^0.17.2",
     "@react-native-community/datetimepicker": "6.5.2",
@@ -16,7 +20,6 @@
     "@react-navigation/native": "^6.1.4",
     "@react-navigation/native-stack": "^6.9.10",
     "axios": "^1.2.0",
-    "dotenv": "^16.0.3",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-brands-svg-icons": "^6.2.1",
     "@fortawesome/free-regular-svg-icons": "^6.2.1",
@@ -26,7 +29,6 @@
     "@react-native-community/checkbox": "^0.5.14",
     "@react-navigation/core": "^6.4.6",
     "@react-navigation/drawer": "^6.5.7",
-    "@react-navigation/native-stack": "^6.9.8",
     "@react-navigation/stack": "^6.3.11",
     "expo": "~47.0.6",
     "expo-status-bar": "~1.4.2",
@@ -41,11 +43,10 @@
     "react-native": "0.70.5",
     "react-native-safe-area-context": "^4.5.0",
     "react-native-screens": "^3.20.0",
-    "react-native-web": "~0.18.9"
+    "react-native-web": "~0.18.9",
     "react-native-gesture-handler": "~2.8.0",
     "react-native-maps": "^1.4.0",
     "react-native-reanimated": "^2.9.1",
-    "react-native-web": "~0.18.9",
     "react-router-dom": "^6.7.0",
     "expo-checkbox": "~2.2.2"
   },

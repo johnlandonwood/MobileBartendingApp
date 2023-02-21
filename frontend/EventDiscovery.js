@@ -11,9 +11,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { CustomButton } from './CustomButton';
 
-import MapView from 'react-native-maps';
+// import MapView from 'react-native-maps';
 
-import {Marker } from 'react-native-maps';
+// import {Marker } from 'react-native-maps';
 
 const Stack = createStackNavigator();
 
@@ -124,17 +124,19 @@ const EventDiscovery = ({ route, navigation }) => {
       longitude: -96.7990,
      };
 
-      return <MapView initialRegion={initialRegion} style={styles.map}>
-                    <CustomButton title="Go Back" onPress={() => {
-                navigation.pop();
-        }}></CustomButton>
+     return <View></View>
 
-        <Marker coordinate={marker1} pinColor={"blue"} title={"Event 1"} description={"Event 1 Description"}
-        ></Marker>
+//       return <MapView initialRegion={initialRegion} style={styles.map}>
+//                     <CustomButton title="Go Back" onPress={() => {
+//                 navigation.pop();
+//         }}></CustomButton>
 
-<Marker coordinate={marker2} pinColor={"blue"} title={"Event 2"} description={"Event 2 Description"}
-        ></Marker>
-        </MapView>
+//         <Marker coordinate={marker1} pinColor={"blue"} title={"Event 1"} description={"Event 1 Description"}
+//         ></Marker>
+
+// <Marker coordinate={marker2} pinColor={"blue"} title={"Event 2"} description={"Event 2 Description"}
+//         ></Marker>
+//         </MapView>
     }
   
     return (

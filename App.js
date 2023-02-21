@@ -40,7 +40,7 @@ function MyDrawer() {
   const dimensions = useWindowDimensions();
 
   return (
-    <Drawer.Navigator
+    <Drawer.Navigator useLegacyImplementation={false}
       screenOptions={{
         drawerType: dimensions.width >= 768 ? 'permanent' : 'front',
         drawerStyle: {

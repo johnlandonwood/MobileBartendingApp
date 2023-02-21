@@ -1,15 +1,18 @@
 import {StatusBar, SafeAreaView, FlatList, 
-    StyleSheet, Text, TouchableOpacity, View, Pressable, TextInput, Button, Platform } from 'react-native';
+    StyleSheet, Text, TouchableOpacity, View, Pressable, TextInput, Button } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 import { useState } from 'react';
-import { StackActions } from '@react-navigation/native';
 
 
+import MapView from 'react-native-maps';
+import { Circle, Marker } from 'react-native-maps';
+
+import {Slider} from '@miblanchard/react-native-slider';
 
 import { CommonStyles } from './Common';
 import { CustomButton } from './CustomButton';
-import Checkbox from 'expo-checkbox';
+
 
 
 const styles = StyleSheet.create({
@@ -93,43 +96,59 @@ const styles = StyleSheet.create({
 });
 
 
+export const EventCreationMap = ({navigation}) => {
+    const initialRegion = {
+        latitude: 32.7767,
+        longitude: -96.7970,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+        };
 
-export const CreateEventForm = ({navigation}) => {
-    const [isPublic, setPublic] = useState(false);
+        const maxRadius = 50.0;
+        const initialSliderValue = 0.5;
 
-    return <View styles={styles.columnContainer}>
-        <View styles={styles.rowContainer}>
-            <TextInput
-            style={CommonStyles.input}
-            placeholderTextColor="grey"
-            placeholder='Event Name'
+        const [region, setRegion] = useState({initialRegion});
+        const [sliderValue, setSliderValue] = useState(initialSliderValue);
+        const [radius, setRadius] = useState(initialSliderValue * maxRadius);
+
+
+    const [markerLocation, setMarkerLocation] = useState({
+        latitude: initialRegion.latitude,
+        longitude: initialRegion.longitude
+    });
+
+    return <View style={StyleSheet.absoluteFillObject}>
+        <MapView
+            initialRegion={initialRegion}
+            style={styles.map}
+            //onRegionChangeComplete runs when the user stops dragging MapView
+            onRegionChangeComplete={(region) => setRegion(region)}
+
+        >
+            <Marker
+                draggable
+                coordinate={{latitude: initialRegion.latitude, 
+                    longitude: initialRegion.longitude}}
+                onDragEnd={(e) => {
+                    setMarkerLocation(e.nativeEvent.coordinate);
+                }}
             />
-        </View>
-        <View styles={styles.rowContainer}>
-            <TextInput
-            style={CommonStyles.input}
-            placeholderTextColor="grey"
-            placeholder='Event Description'
+            <Circle
+                center={markerLocation}
+                radius={radius}
+                fillColor={"rgba(255, 0.0, 0.0, 0.5)"}
             />
-        </View>
-        <View style={styles.rowContainer}>
-            <Text>Public Event</Text>
-            <Checkbox
-            value={isPublic}
-            onValueChange={setPublic}
-            style={styles.checkbox}
-            />
-
+            </MapView>
+        <View>
+            <CustomButton title="Go Back" onPress={()=> {
+                navigation.pop();
+            }}/>
         </View>
 
-        {Platform.OS != 'web' &&
-            <CustomButton title="Select Event Location" onPress={() => {
-                navigation.push("EventMapView");
-            }}></CustomButton>
-        }
-
-        <CustomButton title="Go Back" onPress={() => {
-                navigation.dispatch(StackActions.popToTop());
-        }}></CustomButton>
+        <Slider value={sliderValue} onValueChange={value => {
+            setSliderValue(value);
+            setRadius(value * maxRadius);
+        }}/>
     </View>
+
 }

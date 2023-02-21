@@ -3,7 +3,7 @@ import {StatusBar, SafeAreaView, FlatList,
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { createStackNavigator } from '@react-navigation/stack';
 import {CreateEventForm} from './CreateEventForm';
-// import { EventCreationMap } from './EventCreationMap';
+import { EventCreationMap } from './EventCreationMap';
 
 
 const Stack = createStackNavigator();
@@ -143,10 +143,7 @@ const Admin = ({navigation, route}) => {
           >
         <Stack.Screen name="AdminMenu" component={AdminMenu} />
         <Stack.Screen name="CreateEventForm" component={CreateEventForm} />
-        {/* {Platform.OS != 'web' &&
-        <Stack.Screen name="EventMapView" component={EventCreationMap} />
-        } */}
-        
+        <Stack.Screen name="EventMapView" component={EventCreationMap} />        
     </Stack.Navigator>
 
 }

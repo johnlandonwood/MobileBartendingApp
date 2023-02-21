@@ -1,0 +1,2 @@
+export const EventDiscoveryMap = ({navigation}) => {
+};

@@ -1,9 +1,11 @@
 // MSAL-node documentation: https://learn.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-in-node-web-app
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { storeData } from '../frontend/AsyncStorage';
+// TODO: imports are giving errors when trying to run server.
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const msal = require('@azure/msal-node')
-
 
 // Public Client Application Configuration
 const publicClientConfig = {
@@ -12,7 +14,8 @@ const publicClientConfig = {
         authority: process.env.SIGN_UP_SIGN_IN_POLICY_AUTHORITY, 
         knownAuthorities: [process.env.AUTHORITY_DOMAIN], 
         redirectUri: process.env.APP_REDIRECT_URI,
-        validateAuthority: false
+        validateAuthority: false,
+        navigateToLoginRequestUrl: true
     },
     system: {
         loggerOptions: {
@@ -81,9 +84,8 @@ const getAuthCode = (authority, scopes, state, res) => {
     // request an authorization code to exchange for a token
     return publicClientApplication.getAuthCodeUrl(authCodeRequest)
         .then((response) => {
-            console.log("\nAuthCodeURL: \n" + response);
-            // redirect to the auth code URL/send code to 
-            res.redirect(response);
+            console.log("\nAuthCodeURL: \n" + response); 
+            res.redirect(response)
         })
         .catch((error) => {
             res.status(500).send(error);
@@ -92,7 +94,7 @@ const getAuthCode = (authority, scopes, state, res) => {
 
 // Routes
 app.get('/', (req, res) => {
-    console.log("Pinging backend")
+    console.log("Ping")
 });
 
 app.get('/signin',(req, res)=>{
@@ -119,16 +121,20 @@ app.get('/signout',async (req, res)=>{
 });
 
 app.get('/redirect',(req, res)=>{
-
+    console.log("\n/redirect")
     //determine the reason why the request was sent by checking the state
     if (req.query.state === APP_STATES.LOGIN) {
         //prepare the request for authentication        
         tokenRequest.code = req.query.code;
-        publicClientApplication.acquireTokenByCode(tokenRequest).then((response)=>{
-        req.session.sessionParams = {user: response.account, idToken: response.idToken};
-        console.log("\nAuthToken: \n" + JSON.stringify(response));
-        // now we are authorized, redirect to main page and include name?
-        }).catch((error)=>{
+        publicClientApplication.acquireTokenByCode(tokenRequest).then((response) => {
+            req.session.sessionParams = {user: response.account, idToken: response.idToken};
+            // TODO: Figure out async storage for logged in users
+            // storeData(response.account.given_name)
+            console.log("\nAuthToken: \n" + JSON.stringify(response));
+            // console.log("\nName: " +  response.account.idTokenClaims.given_name);
+            res.redirect("http://localhost:19006")
+        })
+        .catch((error)=>{
             console.log("\nErrorAtLogin: \n" + error);
         });
     }else if (req.query.state === APP_STATES.PASSWORD_RESET) {
@@ -139,11 +145,11 @@ app.get('/redirect',(req, res)=>{
             if (JSON.stringify(req.query.error_description).includes('AADB2C90091')) {
                 //Send the user home with some message
                 //But always check if your session still exists
-                res.render('signin', {showSignInButton: false, givenName: req.session.sessionParams.user.idTokenClaims.given_name, message: 'User has cancelled the operation'});
+                alert(req.query.error_description)
+                //res.render('signin', {showSignInButton: false, givenName: req.session.sessionParams.user.idTokenClaims.given_name, message: 'User has cancelled the operation'});
             }
         }else{
-            
-            res.render('signin', {showSignInButton: false, givenName: req.session.sessionParams.user.idTokenClaims.given_name});
+            res.redirect("http://localhost:19006")
         }        
         
     }else if (req.query.state === APP_STATES.EDIT_PROFILE){
@@ -152,10 +158,10 @@ app.get('/redirect',(req, res)=>{
         tokenRequest.code = req.query.code;
         
         //Request token with claims, including the name that was updated.
-        publicClientApplication.acquireTokenByCode(tokenRequest).then((response)=>{
+        publicClientApplication.acquireTokenByCode(tokenRequest).then((response) => {
             req.session.sessionParams = {user: response.account, idToken: response.idToken};
             console.log("\AuthToken: \n" + JSON.stringify(response));
-            res.render('signin',{showSignInButton: false, givenName: response.account.idTokenClaims.given_name});
+            res.redirect("http://localhost:19006")
         }).catch((error)=>{
             //Handle error
         });

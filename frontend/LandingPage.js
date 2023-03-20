@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Button } from 'react-native';
 import { CustomButton } from './CustomButton';
 import { signIn, editProfile, passwordReset, signOut } from './api/Users';
 import { storeData, getData } from './AsyncStorage';
+// import session from 'express-session'
 
 // const storeData = async (key, value) => {
 //   try {
@@ -28,6 +29,57 @@ import { storeData, getData } from './AsyncStorage';
 // console.log(test)
 // const gd = async()
 
+// storeData("value1")
+// const x = getData()
+//   .then((response) => response)
+//   .then(user => {
+//     return user
+//   })
+  
+
+// console.log(x)
+
+// const address = fetch("https://jsonplaceholder.typicode.com/users/1")
+//   .then((response) => response.json())
+//   .then((user) => {
+//     return user.address;
+//   });
+
+//   const printAddress = async () => {
+//     const a = await address;
+//     console.log(a);
+//   };
+
+//   printAddress();
+
+// storeData("key1", "value1")
+// storeData("key2", "value2")
+// const x = getData("key1")
+//   .then((response) => response);
+// const x2 = getData("key2")
+//   .then((response) => response);
+
+// const printResponse1 = async () => {
+//   const a = await x;
+//   console.log(a)
+// }
+// const printResponse2 = async () => {
+//   const a = await x2;
+//   console.log(a)
+// }
+
+// const name = getData('name')
+//   .then((response) => response)
+
+// const printName = async () => {
+//   const x = await name;
+//   console.log(x);
+// }
+
+// printResponse1();
+// printResponse2();
+// printName();
+
 
 const LandingPage = ({ navigation, signedIn }) => {
   return (
@@ -39,10 +91,10 @@ const LandingPage = ({ navigation, signedIn }) => {
     <CustomButton title="Edit profile" onPress={editProfile}/>
     <CustomButton title="Reset password" onPress={passwordReset}/>
     <CustomButton title="Sign out" onPress={signOut}/>
-    <Text>First Name: </Text>
+    {/* <Text>First Name: </Text>
     <Text>Last Name: </Text>
     <Text>Email: </Text>
-    <Text>Username: </Text>
+    <Text>Username: </Text> */}
 
   </View>
   );

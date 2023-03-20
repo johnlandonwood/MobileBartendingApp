@@ -1,11 +1,14 @@
 // MSAL-node documentation: https://learn.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-in-node-web-app
+
+
+import * as dotenv from 'dotenv'
+dotenv.config()
+import express from 'express';
+import session from 'express-session'
+import * as msal from '@azure/msal-node';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { storeData } from '../frontend/AsyncStorage';
-// TODO: imports are giving errors when trying to run server.
-require('dotenv').config();
-const express = require('express');
-const session = require('express-session');
-const msal = require('@azure/msal-node')
+// import { storeData, getData } from '../frontend/AsyncStorage.js';
+// The two above import statements will give errors related to CJS vs MJS
 
 // Public Client Application Configuration
 const publicClientConfig = {
@@ -129,10 +132,11 @@ app.get('/redirect',(req, res)=>{
         publicClientApplication.acquireTokenByCode(tokenRequest).then((response) => {
             req.session.sessionParams = {user: response.account, idToken: response.idToken};
             // TODO: Figure out async storage for logged in users
-            // storeData(response.account.given_name)
+            // storeData('name', response.account.given_name)
+            global.name = "Landon"
             console.log("\nAuthToken: \n" + JSON.stringify(response));
             // console.log("\nName: " +  response.account.idTokenClaims.given_name);
-            res.redirect("http://localhost:19006")
+            res.redirect("http://localhost:19006/redirect")
         })
         .catch((error)=>{
             console.log("\nErrorAtLogin: \n" + error);

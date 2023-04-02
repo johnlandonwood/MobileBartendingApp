@@ -7,14 +7,14 @@ const bartendingCompanySchema = new mongoose.Schema ({
         required: true
     },
     admin: {
-        type: userSchema,
+        type: userSchema.schema,
         required: true
     },
     sub_admins: {
-        type: [userSchema]
+        type: [userSchema.schema]
     },
     bartenders: {
-        type: [userSchema]
+        type: [userSchema.schema]
     }
 });
 

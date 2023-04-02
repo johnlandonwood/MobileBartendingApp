@@ -20,6 +20,9 @@ import { faWineGlassEmpty } from '@fortawesome/free-solid-svg-icons/faWineGlassE
 import { faWineGlass} from '@fortawesome/free-solid-svg-icons/faWineGlass'
 import { faSort } from '@fortawesome/free-solid-svg-icons/faSort'
 import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter'
+import { faWineBottle } from '@fortawesome/free-solid-svg-icons';
+
+import { faImage } from '@fortawesome/free-regular-svg-icons';
 
 import {faCircleExclamation} from '@fortawesome/free-solid-svg-icons/faCircleExclamation'
 
@@ -29,10 +32,11 @@ import { faMap as farMap } from '@fortawesome/free-regular-svg-icons/faMap'
 
 
 library.add(faStar, farStar, faCalendarDays, faCircle, faCheck, faCircleExclamation,
-  faWineGlass, faWineGlassEmpty, farMap, faSort, faFilter);
+  faWineGlass, faWineGlassEmpty, farMap, faSort, faFilter, faWineBottle, faImage);
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
+import { CommonColors } from './frontend/Common';
 
 const Drawer = createDrawerNavigator();
 
@@ -44,25 +48,26 @@ function MyDrawer() {
       screenOptions={{
         drawerType: dimensions.width >= 768 ? 'permanent' : 'front',
         drawerStyle: {
-          backgroundColor: '#722F37',
-          color: '#F8F3F2',
+          backgroundColor: CommonColors.secondaryBackgroundColor,
+          color: CommonColors.lightTextColor,
         },
         headerStyle: {
-          backgroundColor: '#722F37',//'#BFB8AD',
-          // color: '#F8F3F2',
+          backgroundColor: CommonColors.secondaryBackgroundColor,
         },
         drawerLabelStyle: {
-          color: '#F8F3F2'
+          color: CommonColors.lightTextColor,
         },
-        drawerActiveBackgroundColor: '#998888',
+        drawerActiveBackgroundColor: CommonColors.secondaryButtonColor,
         sceneContainerStyle: {
-          backgroundColor: '#EADEDA'
+          backgroundColor: CommonColors.primaryBackgroundColor,
         }
       }}
     >
       <Drawer.Screen name="Login" component={LoginForm} />
       <Drawer.Screen name="Events" component={EventDiscovery} />
       <Drawer.Screen name="Admin" component={Admin} />
+      <Drawer.Screen name="Bartender" component={Admin} />
+      <Drawer.Screen name="Orders" component={Admin} />
     </Drawer.Navigator>
   );
 }

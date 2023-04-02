@@ -18,7 +18,7 @@ const LoginForm = () => {
 
 
   return (
-  <SafeAreaView style={{backgroundColor: '#EADEDA'}}>
+  <SafeAreaView>
     <Controller
       control={control}
       rules = {{

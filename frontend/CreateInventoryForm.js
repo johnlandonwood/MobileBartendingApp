@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { StackActions } from '@react-navigation/native';
 
 
-
 import { CommonColors, CommonStyles } from './Common';
 import { CustomButton } from './CustomButton';
 import Checkbox from 'expo-checkbox';
@@ -95,41 +94,35 @@ const styles = StyleSheet.create({
 
 
 
-export const CreateEventForm = ({navigation}) => {
-    const [isPublic, setPublic] = useState(false);
-
+export const CreateInventoryForm = ({navigation}) => {
     return <View styles={styles.columnContainer}>
         <View styles={styles.rowContainer}>
             <TextInput
             style={CommonStyles.input}
             placeholderTextColor="grey"
-            placeholder='Event Name'
+            placeholder='Item Name'
             />
         </View>
         <View styles={styles.rowContainer}>
             <TextInput
             style={CommonStyles.input}
             placeholderTextColor="grey"
-            placeholder='Event Description'
+            placeholder='Item Description'
             />
         </View>
-        <View style={styles.checkboxContainer}>
-            <Text>Public Event</Text>
-            <Checkbox
-            value={isPublic}
-            onValueChange={setPublic}
-            style={styles.checkbox}
-            color={""}
+        <View styles={styles.rowContainer}>
+            <TextInput
+            style={CommonStyles.input}
+            placeholderTextColor="grey"
+            placeholder='Item Price'
             />
-
         </View>
-
-        {Platform.OS != 'web' &&
-            <CustomButton title="Select Event Location" onPress={() => {
-                navigation.push("EventMapView");
-            }}></CustomButton>
-        }
-
+        <CustomButton title="Upload Item Picture" onPress={() => {
+                navigation.dispatch(StackActions.popToTop());
+        }}></CustomButton>
+                <CustomButton title="Submit" onPress={() => {
+                navigation.dispatch(StackActions.popToTop());
+        }}></CustomButton>
         <CustomButton title="Go Back" onPress={() => {
                 navigation.dispatch(StackActions.popToTop());
         }}></CustomButton>

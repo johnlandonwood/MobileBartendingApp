@@ -1,7 +1,32 @@
 // const axios = require('axios');
 import axios from 'axios';
-const hostname = "http://localhost:5000/";
+const hostname = "http://localhost:3000/";
 const apiEndpoint = hostname + 'accounts';
+
+export const signIn = () => new Promise ((resolve, reject) => {
+
+    // this works - so I guess Axios is not necessary? Vanilla JS seems too simple but I guess it works?
+    // Concerned that Vanilla JS will not work on mobile
+    window.location.replace(hostname + "signin")
+    // axios.get(hostname + "signin")
+    //     .then(x => resolve(x.data))
+    //     .catch(x => {
+    //         alert(x);
+    //         reject(x);
+    // })
+})
+
+export const editProfile = () => new Promise ((resolve, reject) => {
+    window.location.replace(hostname + "profile")
+})
+
+export const passwordReset = () => new Promise ((resolve, reject) => {
+    window.location.replace(hostname + "password")
+})
+
+export const signOut = () => new Promise ((resolve, reject) => {
+    window.location.replace(hostname + "signout")
+})
 
 
 export const registerNewUser = (user) => new Promise((resolve, reject) => {

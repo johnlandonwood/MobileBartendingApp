@@ -37,6 +37,7 @@ library.add(faStar, farStar, faCalendarDays, faCircle, faCheck, faCircleExclamat
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
+import BartenderOrders from './frontend/BartenderOrders';
 import { CommonColors } from './frontend/Common';
 
 const Drawer = createDrawerNavigator();
@@ -67,9 +68,10 @@ function MyDrawer() {
       <Drawer.Screen name="Landing" component={LandingPage}/>
       <Drawer.Screen name="Login" component={LoginForm} />
       <Drawer.Screen name="Events" component={EventDiscovery} />
+      <Drawer.Screen name="Orders" component={BartenderOrders} />
       <Drawer.Screen name="Admin" component={Admin} />
       <Drawer.Screen name="Bartender" component={Admin} />
-      <Drawer.Screen name="Orders" component={Admin} />
+      {/* <Drawer.Screen name="Orders" component={Admin} /> */}
     </Drawer.Navigator>
   );
 }

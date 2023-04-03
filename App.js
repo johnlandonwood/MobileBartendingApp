@@ -71,7 +71,7 @@ function MyDrawer() {
       <Drawer.Screen name="Orders" component={BartenderOrders} />
       <Drawer.Screen name="Admin" component={Admin} />
       <Drawer.Screen name="Bartender" component={Admin} />
-      <Drawer.Screen name="Orders" component={Admin} />
+      {/* <Drawer.Screen name="Orders" component={Admin} /> */}
     </Drawer.Navigator>
   );
 }

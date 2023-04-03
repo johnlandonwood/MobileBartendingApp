@@ -13,25 +13,22 @@ const eventSchema = new mongoose.Schema ({
         required: true,
         trim: true
     },
-    bartending_company: {
-        type: bartendingCompanySchema,
-        required: true
-    },
+    // bartending_company: {
+    //     type: bartendingCompanySchema.schema,
+    //     required: false
+    // },
     location: {
-        // determine type
-    },
-    date_of_event: {
-        type: String,
+        type: [Number],
         required: true,
-        trim: true
+        index: '2dsphere'
     },
     start_time: {
-        type: String,
+        type: Date,
         required: true,
         trim: true
     },
     end_time: {
-        type: String,
+        type: Date,
         required: true,
         trim: true
     },

@@ -1,9 +1,13 @@
 import {StatusBar, SafeAreaView, FlatList, 
-    StyleSheet, Text, TouchableOpacity, View, Pressable, TextInput, Button, Platform } from 'react-native';
+    StyleSheet, Text, TouchableOpacity, View, Pressable, TextInput, Button, Platform, ScrollView } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { createStackNavigator } from '@react-navigation/stack';
 import {CreateEventForm} from './CreateEventForm';
+import { CreateInventoryForm } from './CreateInventoryForm';
 import { EventCreationMap } from './EventCreationMap';
+import { CommonColors } from './Common';
+import { ManageInventory } from './ManageInventory';
+import EventDiscovery from './EventDiscovery';
 
 
 const Stack = createStackNavigator();
@@ -12,21 +16,14 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       marginTop: StatusBar.currentHeight || 0,
-      paddingTop: 30,
-      paddingLeft: 30,
-      paddingRight: 30,
-      backgroundColor: '#EADEDA',
+      paddingTop: 20,
+      paddingLeft: 20,
+      paddingRight: 20,
       border: 'none',
-    },
-    columnContainer: {
-        flex: 1,
-        flexDirection: "column",
-    },
-    rowContainer: {
-        flex: 1, 
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center"
+      flexDirection: "row",
+      display: "flex",
+      flexWrap: "wrap",
+      alignItems: "flex-start",
     },
 
     header: {
@@ -35,36 +32,34 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     buttonDiv: {
-        paddingTop: 5,
-        paddingLeft: 10,
-        paddingRight: 10,
-        marginBottom: 0,
-        justifyContent: 'space-between',
-        display: 'flex',
+        flex: 1,
+        justifyContent: 'center',
+        // display: 'flex',
         flexDirection: 'column',
-        'textAlign': 'center',
+        textAlign: 'center',
         alignItems: 'center',
+        marginBottom: 10,
+        // marginLeft: 50,
+        // marginRight: 50,
     },
     eventButton: {
-        backgroundColor: '#722F37',
+        backgroundColor: CommonColors.primaryButtonColor,
         width: 96,
         height: 96,
         borderRadius: 96,
         justifyContent: 'center',
         alignItems: 'center',
-        textAlign: 'center',
+        marginBottom: 5,
     },
-    eventButtonLabel: {
-       // color: '#F8F3F2', 
-       color: 'black',
+    eventButtonLabel: { 
+        color: 'black',
         fontWeight: 'bold',
         fontSize: 18, 
         textAlign: 'center',
-        display: 'block',
-        height: '10%',
-
-        // paddingLeft: 20,
-        paddingBottom: 20,
+        //display: 'block',
+        padding: 0,
+        margin: 0,
+        marginHorizontal: 0,
     },
     shadowProp: {
         shadowColor: '#171717',
@@ -72,62 +67,47 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 6,
     },
-    input: {
-        height: 40,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10,
-      },
-    map: {
-        ...StyleSheet.absoluteFillObject,
-        zIndex: -1,
-    },
-    checkbox: {
-
-    },
 
 });
 
 
-const CreateEventButton = ({navigation}) => {
+const CreateAdminButton = ({navigation, icon, nextScreen, title}) => {
     return <View style={styles.buttonDiv}>
-        <TouchableOpacity onPress={() => 
-            navigation.navigate('CreateEventForm', {})
-        }
-            style={[styles.eventButton, styles.shadowProp]}
-            >
-                <FontAwesomeIcon icon="fa-solid fa-calendar-days" size={48} style={{color: '#F8F3F2'}} /> 
+        <TouchableOpacity onPress={() => navigation.navigate(nextScreen, {isAdmin: true})}
+            style={[styles.eventButton, styles.shadowProp]}>
+                <FontAwesomeIcon icon={icon} size={48} style={{color: CommonColors.lightTextColor}} /> 
         </TouchableOpacity>
-        <Text style={styles.eventButtonLabel}>
-                        Create Event
-                </Text>
+        <Text style={styles.eventButtonLabel}>{title}</Text>
     </View>
 }
 
 
+const CreateEventButton = ({navigation}) => {
+    return CreateAdminButton({navigation, icon: "fa-solid fa-calendar-days", nextScreen: "CreateEventForm", title: "Create Event"})
+}
+
 const ManageEventsButton = ({navigation}) => {
-    return <View style={styles.buttonDiv}>
-        <TouchableOpacity onPress={() => 
-            navigation.navigate('CreateEventForm', {})
-        }
-            style={[styles.eventButton, styles.shadowProp]}
-            >
-                <FontAwesomeIcon icon="fa-solid fa-calendar-days" size={48} style={{color: '#F8F3F2'}} /> 
-        </TouchableOpacity>
-        <Text style={styles.eventButtonLabel}>
-                        Manage Events
-                </Text>
-    </View>
+    return CreateAdminButton({navigation, icon: "fa-solid fa-calendar-days", nextScreen: "ManageEvents", title: "Manage Events"})
+}
+
+
+const CreateInventoryButton = ({navigation}) => {
+    return CreateAdminButton({navigation, icon: "fa-solid fa-wine-bottle", nextScreen: "CreateInventoryForm", title: "Create Inventory"})
+}
+
+
+const ManageInventoryButton = ({navigation}) => {
+    return CreateAdminButton({navigation, icon: "fa-solid fa-wine-bottle", nextScreen: "ManageInventory", title: "Manage Inventory"})
 }
 
 
 const AdminMenu = ({navigation}) => {
-    return <SafeAreaView style={styles.container}>
-        <CreateEventButton navigation={navigation}></CreateEventButton>
-        <ManageEventsButton>
-
-        </ManageEventsButton>
-    </SafeAreaView>
+    return <ScrollView contentContainerStyle={styles.container}>
+        <CreateEventButton navigation={navigation} />
+        <ManageEventsButton navigation={navigation}/>
+        <CreateInventoryButton navigation={navigation}/>
+        <ManageInventoryButton navigation={navigation} />
+    </ScrollView>
 }
 
 
@@ -143,7 +123,10 @@ const Admin = ({navigation, route}) => {
           >
         <Stack.Screen name="AdminMenu" component={AdminMenu} />
         <Stack.Screen name="CreateEventForm" component={CreateEventForm} />
-        <Stack.Screen name="EventMapView" component={EventCreationMap} />        
+        <Stack.Screen name="ManageEvents" component={EventDiscovery}/>
+        <Stack.Screen name="CreateInventoryForm" component={CreateInventoryForm} />
+        <Stack.Screen name="ManageInventory" component={ManageInventory} />
+        <Stack.Screen name="EventMapView" component={EventCreationMap} />
     </Stack.Navigator>
 
 }

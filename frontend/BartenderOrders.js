@@ -23,7 +23,8 @@ const ORDERS = [
       quantity: 1, // Note: it should always be drink1 that has 2 quantity. If a user wants to order 2 of the same drink,
       // they should not be able to fill out a drink2. 
     },
-    status: "Unclaimed", // In Queue/Unclaimed, Claimed/Preparing, Ready to Pickup, Completed, Cancelled
+    status: "Unclaimed", // Unclaimed --> Claimed/Preparing --> Ready to Pickup
+    timeFulfilled: "",
   },
   {
     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
@@ -43,6 +44,7 @@ const ORDERS = [
       quantity: 1,
     },
     status: "Unclaimed",
+    timeFulfilled: "",
   },
   {
     id: '58694a0f-3da1-471f-bd96-145571e29d72',
@@ -62,6 +64,7 @@ const ORDERS = [
       quantity: 1,
     },
     status: "Unclaimed",
+    timeFulfilled: "",
   },
   {
     id: 'fffffffa-c1b1-46c2-aed5-3ad53abb28ba',
@@ -81,36 +84,35 @@ const ORDERS = [
       quantity: 0,
     },
     status: "Unclaimed",
+    timeFulfilled: "",
   },
 ];
 
-const Item = ({item, onPress, backgroundColor, textColor}) => (
-  <TouchableOpacity onPress={onPress} style={[styles.item, {backgroundColor}]}>
+const sortOrder = ['Claimed/Preparing', 'Unclaimed', 'Ready for Pickup']
 
+const getColor = (item) => {
+  switch (item.status) {
+    case 'Claimed/Preparing':
+      return '#FEFF97'
+    case "Unclaimed":
+      return '#BAA7A7'
+    case 'Ready for Pickup':
+      return '#8FE6A1'
+  }
+}
+
+const Item = ({item, onPress, backgroundColor, textColor}) => (
+  <TouchableOpacity onPress={onPress} style={[styles.item, {backgroundColor: getColor(item)}]}>
     <View style={styles.itemView}>
       <Text style={styles.itemStatus}>{item.status}</Text>
-      <Text style={styles.timePlaced}>{item.timePlaced}</Text>
+      <Text style={styles.timePlaced}>Placed: {item.timePlaced}</Text>
     </View>
-
     <Text style={[styles.title, {color: textColor}]}>{item.title}</Text>
-    
+    {item.status === "Ready for Pickup" &&
+        <Text style={styles.timePlaced}>Fulfilled: {item.timeFulfilled}</Text>
+      }
   </TouchableOpacity>
 );
-
-
-
-// TODO:
-// How to dynamically change colors of the queue items?
-  // is in the renderItem function the right place to do it?
-  // It doesn't seem like it, as it changes all 4 colors.
-// Claiming orders:
-  // When claim button is pressed, update order status to preparing
-  // remove claim order button and replace with "Ready for pickup" button
-  // when "ready for pickup" button is pressed, set order status to ready for pickup, move order to bottom of queue.
-// Queue:
-  // Claimed/Preparing goes at the top, 
-  // in queue/unclaimed in the middle 
-  // ready for pickup at the bottom.
 
 const BartenderOrders = () => {
 
@@ -121,12 +123,6 @@ const BartenderOrders = () => {
 
     const backgroundColor = item.id === selectedId ? '#BAA7A7' : '#998888';
     const color = item.id === selectedId ? 'black' : 'black';
-
-
-    // const order = ORDERS.find(item => item.id);
-    // if (order.status === "Ready for Pickup") {
-    //   backgroundColor = '#66ff66'
-    // }
 
     return (
       <Item
@@ -150,13 +146,24 @@ const BartenderOrders = () => {
   const readyForPickup = () => {
     setSelectedOrder((pre) => {return ({...pre, status: "Ready for Pickup"})})
     ORDERS.find(item => item.id === selectedId).status = "Ready for Pickup"
+    const currentTime = new Date().toLocaleTimeString('en-US', { 
+        hour: "numeric", 
+        minute: "numeric"
+      }
+    )
+    ORDERS.find(item => item.id === selectedId).timeFulfilled = currentTime
+  }
+
+  const setFulfilledTime = () => {
+    setSelectedOrder((pre) => {return ({...pre, status: "Ready for Pickup"})})
+
   }
 
   return (
   <View style={styles.container}>
       <View style={styles.container}>
         <FlatList
-          data={ORDERS}
+          data={ORDERS.sort((a,b) => sortOrder.indexOf(a.status) - sortOrder.indexOf(b.status))}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           extraData={selectedId}

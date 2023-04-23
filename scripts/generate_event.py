@@ -12,7 +12,7 @@ def generate_random_event():
     name = faker.name()
 
     event = {
-        "event_name": f'{name}\'s Event',
+        "name": f'{name}\'s Event',
         "host": faker.name(),
         "date_of_event": faker.date_between(start_date="-1y", end_date="+1y").isoformat(),
         "start_time": faker.iso8601(tzinfo=None, end_datetime=None),

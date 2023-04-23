@@ -39,6 +39,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { CommonColors } from './frontend/Common';
 
+import BartendingCompanyScreen from './frontend/BartendingCompanyScreen';
+
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -64,12 +66,13 @@ function MyDrawer() {
         }
       }}
     >
-      <Drawer.Screen name="Landing" component={LandingPage}/>
+      <Drawer.Screen name="LandingPage" component={LandingPage}/>
       <Drawer.Screen name="Login" component={LoginForm} />
       <Drawer.Screen name="Events" component={EventDiscovery} />
       <Drawer.Screen name="Admin" component={Admin} />
       <Drawer.Screen name="Bartender" component={Admin} />
       <Drawer.Screen name="Orders" component={Admin} />
+      <Drawer.Screen name="Companies" component={BartendingCompanyScreen} />
     </Drawer.Navigator>
   );
 }

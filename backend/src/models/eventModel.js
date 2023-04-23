@@ -3,7 +3,7 @@ import userSchema from './userModel.js';
 import bartendingCompanySchema from './bartendingCompanyModel.js';
 
 const eventSchema = new mongoose.Schema ({
-    event_name: {
+    name: {
         type: String,
         required: true,
         trim: true
@@ -13,10 +13,10 @@ const eventSchema = new mongoose.Schema ({
         required: true,
         trim: true
     },
-    // bartending_company: {
-    //     type: bartendingCompanySchema.schema,
-    //     required: false
-    // },
+    company: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'BartendingCompany',
+    },
     location: {
         type: [Number],
         required: true,
@@ -37,18 +37,13 @@ const eventSchema = new mongoose.Schema ({
     },
     public_event: {
         type: Boolean
-    }
-    // add drink list
-    // ,
-    // bartenders: {
-    //     type: [userSchema]
-    // },
-    // archived: {
-    //     type: Boolean
-    // },
-    // deleted: {
-    //     type: Boolean
-    // }
+    },
+    archived: {
+        type: Boolean
+    },
+    deleted: {
+        type: Boolean
+    },
 });
 
 export default mongoose.models?.Event || mongoose.model('Event', eventSchema)

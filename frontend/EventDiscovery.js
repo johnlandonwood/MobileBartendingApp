@@ -77,7 +77,7 @@ const Item = ({item, userLocation, onPress, backgroundColor, textColor, isAdmin}
             {formattedDistance}
         </Text>
     </View>
-    <Text style={[styles.itemTitle, {color: textColor}]}>{item.event_name}</Text>
+    <Text style={[styles.itemTitle, {color: textColor}]}>{item.name}</Text>
     {isAdmin && <View style={{flexDirection: "row", flex: 1, flexWrap: "wrap", justifyContent: "space-between"}}>
     <CustomButton title="Modify" textStyle={{fontSize: 13, lineHeight: 13}} buttonStyle={{paddingHorizontal: 18}}/>
     <CustomButton title="Delete" textStyle={{fontSize: 13, lineHeight: 13}} buttonStyle={{paddingHorizontal: 18}}/>

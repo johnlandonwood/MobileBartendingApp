@@ -2,9 +2,11 @@ import mongoose from 'mongoose';
 import emailValidator from 'email-validator';
 import bcrypt from 'bcrypt';
 
+// import bartendingcompany from './bartendingCompanyModel.js';
+
 const SALT_WORK_FACTOR = 10;
 
-const userSchema = new mongoose.Schema ({
+const bartender = new mongoose.Schema ({
     first_name: {
         type: String,
         required: true,
@@ -38,40 +40,41 @@ const userSchema = new mongoose.Schema ({
         trim: true,
         minLength: 8
     },
-    user_type: {
-        type: String,
-        lowercase: true,
-        enum: ["admin", "bartender", "guest"],
-        required: [true, "Specify user role"]
-    },
+    // user_type: {
+    //     type: String,
+    //     lowercase: true,
+    //     enum: ["admin", "bartender", "guest"],
+    //     required: [true, "Specify user role"]
+    // },
     date_of_birth: {
         type: String
-    }
+    },
+    // bartending_company: {
+    //     type: bartendingcompany
+    // }
 });
-
-userSchema.pre('save', async function preSave(next) {
-    var user = this;
+ bartender.pre('save', async function preSave(next) {
+    var bartender = this;
 
     //only hash the password if it has been modified (or is new)
-    if(!user.isModified('password')) return next();
+    if(!bartender.isModified('password')) return next();
 
     //generate a salt
     bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
         if (err) return next(err);
 
         //hash password using our new salt
-        bcrypt.hash(user.password, salt, function(err, hash) {
+        bcrypt.hash(bartender.password, salt, function(err, hash) {
             if(err) return next(err);
 
             //override cleartext password with hashed one
-            user.password = hash;
+            bartender.password = hash;
             next();
         });
     });
 });
-
-userSchema.methods.comparePassword = async function comparePassword(candidatePassword, cb) {
+ bartender.methods.comparePassword = async function comparePassword(candidatePassword, cb) {
     return bcrypt.compare(candidate, this.password);
 };
 
-export default mongoose.models?.User || mongoose.model('User', userSchema)
+export default bartender;

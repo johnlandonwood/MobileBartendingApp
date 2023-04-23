@@ -1,10 +1,10 @@
-const express = require('express');
-const Event = require('../../models/eventModel');
+import express from "express";
+import event from '../models/eventModel.js'
 
-const router = express.Router();
+const events_router = express.Router();
 
-router.post("/events", async (req, res) => {
-    const event = new Event(
+events_router.post("/events", async (req, res) => {
+    const event = new event(
         {
             event_name: req.body.event_name,
             host: req.body.host,
@@ -32,3 +32,5 @@ router.post("/events", async (req, res) => {
 //archive event --> update archived to true
 
 //delete event -> update deleted to true && archive to true if not already true
+
+export default events_router

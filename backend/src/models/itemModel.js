@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-// import Item from './itemModel.js';
+
 
 const itemSchema = new mongoose.Schema ({
     // bartending_company: {
@@ -25,20 +25,9 @@ const itemSchema = new mongoose.Schema ({
         enum: ['Beer', 'Wine', 'Liquor', 'Mixed Drink', 'Non-Alcoholic'],
         required: true
     }
+},
+{
+    collection: 'items'
 });
 
-const Item = mongoose.model('Item', itemSchema);
-
-const drinkListSchema = new mongoose.Schema ({
-    // bartending_company: {
-    //     type: bartendingcompany,
-    //     required: true
-    // },
-    drink_list_name: {
-        type: String,
-        required: true
-    },
-    item_list: [{type: mongoose.Schema.Types.ObjectId, ref: 'Item'}]
-});
-
-export default mongoose.models?.DrinkList || mongoose.model('DrinkList', drinkListSchema);
+export default mongoose.models?.Item || mongoose.model('Item', itemSchema);

@@ -4,6 +4,8 @@ import { StyleSheet, Text, View, Switch, useWindowDimensions } from 'react-nativ
 import LoginForm from './frontend/LoginForm';
 import EventDiscovery from './frontend/EventDiscovery';
 import Admin from './frontend/Admin';
+import ItemList from './frontend/ItemList';
+import ItemDetails from './frontend/ItemDetails';
 import {
   BrowserRouter as Router,
   Route,
@@ -60,9 +62,11 @@ function MyDrawer() {
         }
       }}
     >
-      <Drawer.Screen name="Login" component={LoginForm} />
+      {/* <Drawer.Screen name="Login" component={LoginForm} />
       <Drawer.Screen name="Events" component={EventDiscovery} />
-      <Drawer.Screen name="Admin" component={Admin} />
+      <Drawer.Screen name="Admin" component={Admin} /> */}
+      <Drawer.Screen name="ItemList" component={ItemList} />
+      <Drawer.Screen name="ItemDetails" component={ItemDetails} />
     </Drawer.Navigator>
   );
 }

@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
-import userSchema from './userModel.js';
-import bartendingCompanySchema from './bartendingCompanyModel.js';
+import user from './guestModel.js';
 
-const eventSchema = new mongoose.Schema ({
+const event = new mongoose.Schema ({
     event_name: {
         type: String,
         required: true,
@@ -13,12 +12,12 @@ const eventSchema = new mongoose.Schema ({
         required: true,
         trim: true
     },
-    bartending_company: {
-        type: bartendingCompanySchema,
-        required: true
-    },
+    // bartending_company: {
+    //     type: bartendingcompany,
+    //     required: true
+    // },
     location: {
-        // determine type
+        
     },
     date_of_event: {
         type: String,
@@ -44,7 +43,7 @@ const eventSchema = new mongoose.Schema ({
     // add drink list
     // ,
     // bartenders: {
-    //     type: [userSchema]
+    //     type: [user]
     // },
     // archived: {
     //     type: Boolean
@@ -54,4 +53,4 @@ const eventSchema = new mongoose.Schema ({
     // }
 });
 
-export default mongoose.models?.Event || mongoose.model('Event', eventSchema)
+export default event

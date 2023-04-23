@@ -18,7 +18,7 @@ const LoginForm = () => {
 
 
   return (
-  <SafeAreaView style={{backgroundColor: '#EADEDA'}}>
+  <View style={{backgroundColor: '#EADEDA'}}>
     <Controller
       control={control}
       rules = {{
@@ -63,7 +63,7 @@ const LoginForm = () => {
     {errors.email  && <Alert text="Password is required."></Alert>}
 
     <CustomButton title="Log In" onPress={handleSubmit(onSubmit)} style={styles.loginButton}/>
-  </SafeAreaView>
+  </View>
   );
 };
 

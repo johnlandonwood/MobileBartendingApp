@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+// Can't get this async storage solution to work for storing login session variables.
 // require('@react-native-async-storage/async-storage')
 
 export const storeData = async (key, value) => {

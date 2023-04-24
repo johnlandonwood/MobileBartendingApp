@@ -1,20 +1,31 @@
 import mongoose from 'mongoose';
-import userSchema from './userModel.js';
+
 
 const bartendingCompanySchema = new mongoose.Schema ({
-    bartending_company_name: {
+    name: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+    },
+    email: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: true
     },
     admin: {
-        type: userSchema.schema,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
-    sub_admins: {
-        type: [userSchema.schema]
-    },
-    bartenders: {
-        type: [userSchema.schema]
+    bartenders: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User'
+        }
+    ],
+    logoUrl: {
+        type: String,
+        trim: true,
     }
 });
 

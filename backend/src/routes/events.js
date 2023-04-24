@@ -8,7 +8,7 @@ const router = express.Router();
 
 
 const eventCreateRules = [
-    body('event_name').trim().escape().notEmpty().withMessage('Event name is required'),
+    body('name').trim().escape().notEmpty().withMessage('Event name is required'),
     body('host').trim().escape().notEmpty().withMessage('Host is required'),
     body('start_time').trim().notEmpty().withMessage('Start time is required').isISO8601().toDate(),
     body('end_time').trim().notEmpty().withMessage('End time is required').isISO8601().toDate(),
@@ -28,7 +28,7 @@ router.post('/events', eventCreateRules, async (req, res) => {
     }
   
     const {
-      event_name,
+      name,
       host,
       date_of_event,
       start_time,
@@ -39,7 +39,7 @@ router.post('/events', eventCreateRules, async (req, res) => {
     } = req.body;
   
     const newEvent = new Event({
-      event_name,
+      name,
       host,
       date_of_event,
       start_time,
@@ -60,7 +60,7 @@ router.post('/events', eventCreateRules, async (req, res) => {
 
 
 const eventFilterRules = [
-    query('event_name').optional().trim().escape(),
+    query('name').optional().trim().escape(),
     query('host').optional().trim().escape(),
     query('start_time').optional().trim().isISO8601().toDate(),
     query('end_time').optional().trim().isISO8601().toDate(),
@@ -79,7 +79,7 @@ router.get("/events", eventFilterRules, async (req, res) => {
     }
 
     const {
-        event_name,
+        name,
         host,
         date_of_event,
         start_time,
@@ -99,7 +99,7 @@ router.get("/events", eventFilterRules, async (req, res) => {
     
     const filter = {};
 
-    if (event_name) filter.event_name = event_name;
+    if (name) filter.name = name;
     if (host) filter.host = host;
     if (date_of_event) filter.date_of_event = date_of_event;
     if (start_time) filter.start_time = { $gte: start_time };

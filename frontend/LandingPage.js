@@ -1,112 +1,133 @@
-import React from 'react';
-import { View, StyleSheet, Text, Button } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 import { CustomButton } from './CustomButton';
-import { signIn, editProfile, passwordReset, signOut } from './api/Users';
-import { storeData, getData } from './AsyncStorage';
-// import session from 'express-session'
+import { createStackNavigator } from '@react-navigation/stack';
+import { FontAwesome } from '@expo/vector-icons';
 
-// const storeData = async (key, value) => {
-//   try {
-//     await AsyncStorage.setItem(key, value)
-//   } catch (e) {
-//     // saving error
-//   }
-// }
+const Stack = createStackNavigator();
 
-// const getData = async (key) => {
-//   try {
-//     const value = await AsyncStorage.getItem(key)
-//     if(value !== null) {
-//       return value;
-//     }
-//   } catch(e) {
-//     // error reading value
-//   }
-// }
-// storeData('chung', 'bung')
-// getData('chung')
-// let test = getData("chung")
-// console.log(test)
-// const gd = async()
-
-// storeData("value1")
-// const x = getData()
-//   .then((response) => response)
-//   .then(user => {
-//     return user
-//   })
-  
-
-// console.log(x)
-
-// const address = fetch("https://jsonplaceholder.typicode.com/users/1")
-//   .then((response) => response.json())
-//   .then((user) => {
-//     return user.address;
-//   });
-
-//   const printAddress = async () => {
-//     const a = await address;
-//     console.log(a);
-//   };
-
-//   printAddress();
-
-// storeData("key1", "value1")
-// storeData("key2", "value2")
-// const x = getData("key1")
-//   .then((response) => response);
-// const x2 = getData("key2")
-//   .then((response) => response);
-
-// const printResponse1 = async () => {
-//   const a = await x;
-//   console.log(a)
-// }
-// const printResponse2 = async () => {
-//   const a = await x2;
-//   console.log(a)
-// }
-
-// const name = getData('name')
-//   .then((response) => response)
-
-// const printName = async () => {
-//   const x = await name;
-//   console.log(x);
-// }
-
-// printResponse1();
-// printResponse2();
-// printName();
-
-
-const LandingPage = ({ navigation, signedIn }) => {
+const LandingScreen = ({ navigation, signedIn }) => {
   return (
-  <View style={styles.container}>
-    {/* if not signed in: */}
-    <Text>Welcome to BarPal.</Text>
-    <CustomButton title="Sign in / Create Account" onPress={signIn}/>
-    {/* if *signed in:> */}
-    <CustomButton title="Edit profile" onPress={editProfile}/>
-    <CustomButton title="Reset password" onPress={passwordReset}/>
-    <CustomButton title="Sign out" onPress={signOut}/>
-    {/* <Text>First Name: </Text>
-    <Text>Last Name: </Text>
-    <Text>Email: </Text>
-    <Text>Username: </Text> */}
-
-  </View>
+    <View style={styles.container}>
+      <Text>Welcome to BarPal.</Text>
+      {signedIn ? (
+        <>
+          <CustomButton title="Edit profile" onPress={() => navigation.navigate('EditProfile')}/>
+          <CustomButton title="Reset password" onPress={() => navigation.navigate('EditProfile')}/>
+          <CustomButton title="Sign out" onPress={() => navigation.navigate('EditProfile')}/>
+        </>
+      ) : (
+        <>
+            <CustomButton title="Create Account" onPress={() => navigation.navigate('SignUp')}/>
+            <CustomButton title="Sign In" onPress={() => navigation.navigate('SignIn')}/>
+        </>
+      )}
+    </View> 
   );
 };
 
+
+const EmailRegistrationScreen = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+
+  const handleSignUp = async () => {
+    const user = await signUpWithEmail(email, password, firstName, lastName);
+    if (user) {
+      navigation.goBack();
+    }
+    return (
+      <View style={styles.container}>
+        <Text>Sign up with email</Text>
+        <TextInput
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+          keyboardType="email-address"
+        />
+        <TextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          style={styles.input}
+          secureTextEntry
+        />
+        <TextInput
+          placeholder="First name"
+          value={firstName}
+          onChangeText={setFirstName}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Last name"
+          value={lastName}
+          onChangeText={setLastName}
+          style={styles.input}
+        />
+        <CustomButton title="Sign up" onPress={handleSignUp}/>
+      </View>
+    );
+  };
+}
+
+
+const SignUpScreen = ({ navigation }) => {
+  const handleSignUp = async (provider) => {
+    const user = await signUpWithProvider(provider);
+
+    if (user) {
+      navigation.goBack();
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text>Sign up for BarPal</Text>
+      <View style={styles.signupButtonsContainer}>
+        <CustomButton title="Sign up with Google" onPress={() => handleSignUp('google')}>
+          <FontAwesome name="google" size={20} color="white" />
+        </CustomButton>
+        <CustomButton title="Sign up with Apple" onPress={() => handleSignUp('apple')}>
+          <FontAwesome name="apple" size={20} color="white" />
+        </CustomButton>
+        <CustomButton title="Sign up with Microsoft" onPress={() => handleSignUp('microsoft')}>
+          <FontAwesome name="windows" size={20} color="white" />
+        </CustomButton>
+        <CustomButton title="Sign up with Email" onPress={() => handleSignUp('email')}>
+        </CustomButton>
+      </View>
+    </View>
+  );
+};
+
+
+
+const LandingPage = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Landing" component={LandingScreen} />
+      <Stack.Screen name="EmailRegistrationScreen" component={EmailRegistrationScreen} />
+      <Stack.Screen name="SignUp" component={SignUpScreen} />
+    </Stack.Navigator>
+  );
+};
+
+
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  });
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  signupButtonsContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    width: '100%',
+  },
+});
 
 
 export default LandingPage;

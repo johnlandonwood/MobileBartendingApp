@@ -70,7 +70,7 @@ function MyDrawer() {
       <Drawer.Screen name="LandingPage" component={LandingPage}/>
       <Drawer.Screen name="Login" component={LoginForm} />
       <Drawer.Screen name="Events" component={EventDiscovery} />
-      <Drawer.Screen name="Orders" component={BartenderOrders} />
+      <Drawer.Screen name="Bartender Orders" component={BartenderOrders} />
       <Drawer.Screen name="Admin" component={Admin} />
       <Drawer.Screen name="Bartender" component={Admin} />
       <Drawer.Screen name="Orders" component={Admin} />

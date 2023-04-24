@@ -1,92 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet, Text, StatusBar, TouchableOpacity, } from 'react-native';
 import { CustomButton } from './CustomButton';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faBeer, faWineGlass, faWhiskeyGlass } from '@fortawesome/free-solid-svg-icons';
-
-const ORDERS = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'Order #1', // replace titles with just numbers as they are removed and added from the queue?
-    timePlaced: "7:00 PM",
-    placedBy: "Landon Wood",
-    drink1: {
-      name: "Deep Ellum IPA",
-      additionalInstructions: "",
-      type: "beer", // For favicon display on selected order display
-      quantity: 1,
-    },
-    drink2: {
-      name: "Whiskey Sour",
-      additionalInstructions: "Light ice",
-      type: "cocktail",
-      quantity: 1, // Note: it should always be drink1 that has 2 quantity. If a user wants to order 2 of the same drink,
-      // they should not be able to fill out a drink2. 
-    },
-    status: "Unclaimed", // Unclaimed --> Claimed/Preparing --> Ready to Pickup
-    timeFulfilled: "",
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Order #2',
-    timePlaced: "7:01 PM",
-    placedBy: "Maria Harrison",
-    drink1: {
-      name: "Pinot Noir",
-      additionalInstructions: "",
-      type: "wine",
-      quantity: 1,
-    },
-    drink2: {
-      name: "Tequila",
-      additionalInstructions: "Light ice",
-      type: "cocktail",
-      quantity: 1,
-    },
-    status: "Unclaimed",
-    timeFulfilled: "",
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Order #3',
-    timePlaced: "7:02 PM",
-    placedBy: "Alex Cerpa",
-    drink1: {
-      name: "Martini",
-      additionalInstructions: "Shaken, not stirred",
-      type: "cocktail",
-      quantity: 1,
-    },
-    drink2: {
-      name: "Vodka Red Bull",
-      additionalInstructions: "Tito's for the vodka",
-      type: "cocktail",
-      quantity: 1,
-    },
-    status: "Unclaimed",
-    timeFulfilled: "",
-  },
-  {
-    id: 'fffffffa-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'Order #4', 
-    timePlaced: "7:03 PM",
-    placedBy: "Landon Wood",
-    drink1: {
-      name: "Miller Lite",
-      additionalInstructions: "",
-      type: "beer", 
-      quantity: 2,
-    },
-    drink2: {
-      name: "",
-      additionalInstructions: "",
-      type: "",
-      quantity: 0,
-    },
-    status: "Unclaimed",
-    timeFulfilled: "",
-  },
-];
+import { getOrders } from './api/bartenderOrders';
 
 const sortOrder = ['Claimed/Preparing', 'Unclaimed', 'Ready for Pickup']
 
@@ -118,18 +35,30 @@ const BartenderOrders = () => {
 
   const [selectedId, setSelectedId] = useState();
   const [selectedOrder, setSelectedOrder] = useState();
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchOrders = async () => {
+    const response = await getOrders();
+    setOrders(response);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []); 
 
   const renderItem = ({item}) => {
 
-    const backgroundColor = item.id === selectedId ? '#BAA7A7' : '#998888';
-    const color = item.id === selectedId ? 'black' : 'black';
+    const backgroundColor = item._id === selectedId ? '#BAA7A7' : '#998888';
+    const color = item._id === selectedId ? 'black' : 'black';
 
     return (
       <Item
         item={item}
         onPress={() => {
-            setSelectedId(item.id);
-            setSelectedOrder(ORDERS.find(item => item.id === selectedId));
+            setSelectedId(item._id);
+            setSelectedOrder(orders.find(item => item._id === selectedId));
           }
         }
         backgroundColor={backgroundColor}
@@ -140,35 +69,44 @@ const BartenderOrders = () => {
 
   const claimOrder = () => {
     setSelectedOrder((pre) => {return ({...pre, status: "Claimed/Preparing"})})
-    ORDERS.find(item => item.id === selectedId).status = "Claimed/Preparing"
+    orders.find(item => item._id === selectedId).status = "Claimed/Preparing"
   }
 
   const readyForPickup = () => {
     setSelectedOrder((pre) => {return ({...pre, status: "Ready for Pickup"})})
-    ORDERS.find(item => item.id === selectedId).status = "Ready for Pickup"
+    orders.find(item => item._id === selectedId).status = "Ready for Pickup"
     const currentTime = new Date().toLocaleTimeString('en-US', { 
         hour: "numeric", 
         minute: "numeric"
       }
     )
-    ORDERS.find(item => item.id === selectedId).timeFulfilled = currentTime
+    orders.find(item => item._id === selectedId).timeFulfilled = currentTime
   }
 
   const setFulfilledTime = () => {
     setSelectedOrder((pre) => {return ({...pre, status: "Ready for Pickup"})})
-
   }
 
   return (
   <View style={styles.container}>
       <View style={styles.container}>
-        <FlatList
+        {/* <FlatList
           data={ORDERS.sort((a,b) => sortOrder.indexOf(a.status) - sortOrder.indexOf(b.status))}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           extraData={selectedId}
-        />
+        /> */}
+        {loading && <Text>Loading orders...</Text>}
+        {orders && (
+          <FlatList
+            data={orders.sort((a,b) => sortOrder.indexOf(a.status) - sortOrder.indexOf(b.status))}
+            renderItem={renderItem}
+            keyExtractor={item => item._id}
+            extraData={selectedId}
+          />
+        )}
       </View>
+
       <View style={styles.selectedOrder}>
         {selectedOrder === undefined && 
           <Text style={styles.selectPrompt}>Select an order from the queue to view it.</Text>

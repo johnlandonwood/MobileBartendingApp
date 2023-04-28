@@ -2,16 +2,15 @@ import mongoose from 'mongoose';
 import emailValidator from 'email-validator';
 import bcrypt from 'bcrypt';
 
-const SALT_WORK_FACTOR = 10;
 
-const guest = new mongoose.Schema ({
-    first_name: {
+const userSchema = new mongoose.Schema ({
+    firstName: {
         type: String,
         required: true,
         lowercase: true,
         trim: true
     },
-    last_name: {
+    lastName: {
         type: String,
         required: true,
         lowercase: true,
@@ -19,7 +18,7 @@ const guest = new mongoose.Schema ({
     },
     email: {
         type: String,
-        // required: true,
+        required: true,
         lowercase: true,
         trim: true,
         unique: true,
@@ -28,48 +27,42 @@ const guest = new mongoose.Schema ({
             message: props => `${props.value} is not a valid email address.`
         }
     },
-    phone_number: {
+    phone: {
         type: String,
-        unique: true
+        unique: true,
+        trim: true
+    },
+    role: {
+        type: String,
+        required: true,
+        enum: ['admin', 'company_owner', 'bartender']
+    },
+    dob: {
+        type: Date,
+    },
+    company: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'BartendingCompany'
     },
     password: {
         type: String,
         required: true,
-        trim: true,
-        minLength: 8
-    },
-    // user_type: {
-    //     type: String,
-    //     lowercase: true,
-    //     enum: ["admin", "bartender", "guest"],
-    //     required: [true, "Specify user role"]
-    // },
-    date_of_birth: {
-        type: String
-    }
+        minlength: 8
+    },    
 });
- guest.pre('save', async function preSave(next) {
-    var guest = this;
 
-    //only hash the password if it has been modified (or is new)
-    if(!guest.isModified('password')) return next();
 
-    //generate a salt
-    bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-        if (err) return next(err);
-
-        //hash password using our new salt
-        bcrypt.hash(guest.password, salt, function(err, hash) {
-            if(err) return next(err);
-
-            //override cleartext password with hashed one
-            guest.password = hash;
-            next();
-        });
-    });
-});
- guest.methods.comparePassword = async function comparePassword(candidatePassword, cb) {
-    return bcrypt.compare(candidate, this.password);
+userSchema.methods.hashPassword = async function(password) {
+    const saltRounds = 10;
+    return await bcrypt.hash(password, saltRounds);
 };
 
-export default guest;
+// Add this pre-save hook to hash the password before saving
+userSchema.pre('save', async function(next) {
+    if (this.isModified('password')) {
+        this.password = await this.hashPassword(this.password);
+    }
+    next();
+});
+
+export default mongoose.models?.User || mongoose.model('User', userSchema)

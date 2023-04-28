@@ -2,6 +2,16 @@ import { StyleSheet, View, Text } from "react-native";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 
+export const CommonColors = {
+    primaryBackgroundColor: "#EADEDA",
+    secondaryBackgroundColor: "#722F37",
+    lightTextColor: '#F8F3F2',
+
+    primaryButtonColor: "#722F37",
+    secondaryButtonColor: "#998888",
+
+}
+
 export const CommonStyles = StyleSheet.create({
     input: {
         height: 40,

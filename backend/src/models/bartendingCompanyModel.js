@@ -1,24 +1,31 @@
 import mongoose from 'mongoose';
 
 const bartendingCompanySchema = new mongoose.Schema ({
-    bartending_company_name: {
+    name: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
     },
-    // admin: {
-    //     type: user,
-    //     required: true
-    // },
-    // sub_admins: {
-    //     type: [user]
-    // },
-    // bartenders: {
-    //     type: [user]
-    // }
+    email: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: true
+    },
+    admin: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    bartenders: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User'
+        }
+    ],
+    logoUrl: {
+        type: String,
+        trim: true,
+    }
 });
 
-const bartendingCompanyModel = mongoose.model('BartendingCompany', bartendingCompanySchema);
-
-export const schema = bartendingCompanyModel.schema;
-
-export default bartendingCompanyModel;
+export default mongoose.models?.BartendingCompany || mongoose.model('BartendingCompany', bartendingCompanySchema)

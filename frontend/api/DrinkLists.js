@@ -17,7 +17,7 @@ const config = {
 export const getDrinkList = (id) => new Promise((resolve, reject) => {
     axios.get(`http://localhost:4000/api/drinklists/${id}`)
     .then(x => {resolve(x.data);
-        console.log(x.data);
+        // console.log(x.data);
     })
     .catch(x => {
         alert(x);

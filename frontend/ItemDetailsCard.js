@@ -1,12 +1,15 @@
 import React from 'react';
+import { useState } from 'react';
 import {View, Text, Image, Button, Dimensions, StyleSheet, TextInput} from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import SimpleStepper from 'react-native-simple-stepper';
 const screenWidth = Dimensions.get('window').width;
 
-const ItemDetailsCard = ({item, qty, qtyChanged}) => {
-  const [text, onChangeText] = React.useState('');
+const ItemDetailsCard = ({item, qty, qtyChanged, addToCart}) => {
+  const [additionalNotes, onChangeText] = React.useState('');
   const [iceSelected, setIceSelected] = React.useState("");
+  console.log(qty);
+  console.log(additionalNotes);
 
   const iceAddOns = [
     {key:'1', value:'No Ice'},
@@ -38,7 +41,7 @@ const ItemDetailsCard = ({item, qty, qtyChanged}) => {
         </View>
       </View>
 
-      <View style={styles.addOns}>
+      {/* <View style={styles.addOns}>
         <Text style={styles.labelText}>Ice Add-Ons</Text>
         <SelectList
           setSelected={(val) => setIceSelected(val)}
@@ -46,14 +49,14 @@ const ItemDetailsCard = ({item, qty, qtyChanged}) => {
           save="value"
           search={false}
         />
-      </View>
+      </View> */}
 
       <View style={styles.specialInstructions}>
         <Text style={styles.labelText}>Special Instructions </Text>
         <TextInput
           style={styles.input}
           onChangeText={onChangeText}
-          value={text}
+          value={additionalNotes}
           placeholder="Add a note for your bartender"
           keyboardType='alphanumeric'
         />
@@ -79,7 +82,7 @@ const ItemDetailsCard = ({item, qty, qtyChanged}) => {
       <View style={styles.itemContainer}>
         <Button
           onPress={() => {
-            // addToCart(item, qty);
+            addToCart(item, qty, additionalNotes);
           }}
           title="Add to Basket"
           color="#c53c3c"

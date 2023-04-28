@@ -6,7 +6,9 @@ import EventDiscovery from './frontend/EventDiscovery';
 import Admin from './frontend/Admin';
 import ItemList from './frontend/ItemList';
 import ItemDetails from './frontend/ItemDetails';
+import CartSummary from './frontend/CartSummary';
 import LandingPage from './frontend/LandingPage';
+import { CartProvider } from './frontend/context/CartContext';
 import {
   BrowserRouter as Router,
   Route,
@@ -71,14 +73,15 @@ function MyDrawer() {
     >
       <Drawer.Screen name="ItemList" component={ItemList} />
       <Drawer.Screen name="ItemDetails" component={ItemDetails} />
-      <Drawer.Screen name="LandingPage" component={LandingPage}/>
+      <Drawer.Screen name="CartSummary" component={CartSummary} />
+      {/* <Drawer.Screen name="LandingPage" component={LandingPage}/>
       <Drawer.Screen name="Login" component={LoginForm} />
       <Drawer.Screen name="Events" component={EventDiscovery} />
       <Drawer.Screen name="Orders" component={BartenderOrders} />
       <Drawer.Screen name="Admin" component={Admin} />
       <Drawer.Screen name="Bartender" component={Admin} />
       <Drawer.Screen name="Orders" component={Admin} />
-      <Drawer.Screen name="Companies" component={BartendingCompanyScreen} />
+      <Drawer.Screen name="Companies" component={BartendingCompanyScreen} /> */}
     </Drawer.Navigator>
   );
 }
@@ -88,7 +91,9 @@ function MyDrawer() {
 export default function App() {
   return (
     <NavigationContainer>
-      <MyDrawer />
+      <CartProvider>
+        <MyDrawer />
+      </CartProvider>
     </NavigationContainer>
   );
 }

@@ -1,5 +1,9 @@
-import { blobServiceClient } from "../../azureBlobStorage.js";
+import { blobServiceClient } from "../azureBlobStorage.js";
 import { validationResult } from "express-validator";
+
+import jwt from 'jsonwebtoken';
+import User from '../models/userModel.js';
+import dotenv from "dotenv";
 
 
 // Error handling middleware
@@ -48,4 +52,41 @@ export async function deleteDBObject(ItemClass, name, req, res) {
     }
 }
 
+export const authenticate = async (req, res, next) => {
+  try {
+    let token = req.header('Authorization');
+
+    if (!token) {
+      console.log('No token provided. Access denied.');
+      return res.status(401).json({ message: 'No token provided. Access denied.' });
+    }
+
+    token = token.replace('Bearer ', '');
+
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET); // Replace with your JWT secret key
+      const user = await User.findById(decoded.id);
+
+      if (!user) {
+        console.log('Invalid token. Access denied.');
+        return res.status(401).json({ message: 'Invalid token. Access denied.' });
+      }
+
+      req.user = user;
+      next();
+    } catch (error) {
+      console.error('JWT verification error:', error);
+      if (error instanceof jwt.TokenExpiredError) {
+        res.status(401).json({ message: 'Token has expired. Access denied.' });
+      } else if (error instanceof jwt.JsonWebTokenError) {
+        res.status(401).json({ message: 'Invalid token. Access denied.' });
+      } else {
+        res.status(401).json({ message: 'Access denied.' });
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(401).json({ message: 'Invalid token. Access denied.' });
+  }
+};
 

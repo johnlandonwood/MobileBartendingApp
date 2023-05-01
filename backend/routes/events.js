@@ -3,6 +3,7 @@ import express from "express";
 import Event from '../models/eventModel.js';
 
 import { query, body, validationResult } from "express-validator";
+import { authenticate } from "./routesUtil.js";
 
 const router = express.Router();
 
@@ -10,6 +11,7 @@ const router = express.Router();
 const eventCreateRules = [
     body('name').trim().escape().notEmpty().withMessage('Event name is required'),
     body('host').trim().escape().notEmpty().withMessage('Host is required'),
+    body('description').trim().escape().notEmpty().withMessage('Description is required'),
     body('start_time').trim().notEmpty().withMessage('Start time is required').isISO8601().toDate(),
     body('end_time').trim().notEmpty().withMessage('End time is required').isISO8601().toDate(),
     body('open_bar').optional().toBoolean(),
@@ -18,10 +20,11 @@ const eventCreateRules = [
     body('location')
       .custom((value) => Array.isArray(value) && value.length === 2)
       .withMessage('Location must be an array of two elements: [longitude, latitude]'),
+    body('radius').isFloat().withMessage('Radius must be a valid number'),
 ];
 
 
-router.post('/events', eventCreateRules, async (req, res) => {
+router.post('/events', authenticate, eventCreateRules, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -35,7 +38,9 @@ router.post('/events', eventCreateRules, async (req, res) => {
       end_time,
       open_bar,
       public_event,
-      location
+      location,
+      radius,
+      description
     } = req.body;
   
     const newEvent = new Event({
@@ -46,7 +51,9 @@ router.post('/events', eventCreateRules, async (req, res) => {
       end_time,
       open_bar,
       public_event,
-      location
+      location,
+      radius,
+      description
     });
   
     try {

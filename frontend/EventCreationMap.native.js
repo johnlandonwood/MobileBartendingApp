@@ -141,7 +141,7 @@ export const EventCreationMap = ({navigation}) => {
             </MapView>
         <View>
             <CustomButton title="Go Back" onPress={()=> {
-                navigation.pop();
+                navigation.navigate('CreateEventForm', { markerLocation, radius });
             }}/>
         </View>
 

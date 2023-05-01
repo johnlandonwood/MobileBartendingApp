@@ -1,86 +1,96 @@
 import 'react-native-gesture-handler';
-import { StyleSheet, Text, View, Switch, useWindowDimensions, StatusBar } from 'react-native';
-import LoginForm from './frontend/LoginForm';
-import EventDiscovery from './frontend/EventDiscovery';
-import Admin from './frontend/Admin';
-import GuestOrderScreens from './frontend/GuestOrderScreens';
-import ItemList from './frontend/ItemList';
-import ItemDetails from './frontend/ItemDetails';
-import CartSummary from './frontend/CartSummary';
-import LandingPage from './frontend/LandingPage';
-import DrinksScreen from './frontend/DrinksScreen';
-import BartendingCompanyScreen from './frontend/BartendingCompanyScreen';
-import { CartProvider } from './frontend/context/CartContext';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from "react-router-dom";
+import { StyleSheet, useWindowDimensions } from 'react-native';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { 
+  faStar, 
+  faCalendarDays, 
+  faCircle, 
+  faCheck, 
+  faWineGlassEmpty, 
+  faWineGlass, 
+  faSort, 
+  faFilter, 
+  faWineBottle, 
+  faExclamationCircle
+} from '@fortawesome/free-solid-svg-icons';
+import { 
+  faImage, 
+  faStar as farStar, 
+  faMap as farMap 
+} from '@fortawesome/free-regular-svg-icons';
+
+library.add(
+  faStar, 
+  farStar, 
+  faCalendarDays, 
+  faCircle, 
+  faCheck, 
+  faExclamationCircle,
+  faWineGlass, 
+  faWineGlassEmpty, 
+  farMap, 
+  faSort, 
+  faFilter, 
+  faWineBottle, 
+  faImage
+);
 
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faStar } from '@fortawesome/free-solid-svg-icons/faStar'
-import { faCalendarDays } from '@fortawesome/free-solid-svg-icons/faCalendarDays'
-import { faCircle } from '@fortawesome/free-solid-svg-icons/faCircle'
-import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck'
-import { faWineGlassEmpty } from '@fortawesome/free-solid-svg-icons/faWineGlassEmpty'
-import { faWineGlass} from '@fortawesome/free-solid-svg-icons/faWineGlass'
-import { faSort } from '@fortawesome/free-solid-svg-icons/faSort'
-import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter'
-import { faWineBottle } from '@fortawesome/free-solid-svg-icons';
-
-import { faImage } from '@fortawesome/free-regular-svg-icons';
-
-import {faCircleExclamation} from '@fortawesome/free-solid-svg-icons/faCircleExclamation'
-
-import { faStar as farStar } from '@fortawesome/free-regular-svg-icons/faStar'
-import { faMap as farMap } from '@fortawesome/free-regular-svg-icons/faMap'
-
-
-
-library.add(faStar, farStar, faCalendarDays, faCircle, faCheck, faCircleExclamation,
-  faWineGlass, faWineGlassEmpty, farMap, faSort, faFilter, faWineBottle, faImage);
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
+import EventDiscovery from './frontend/EventDiscovery';
+import Admin from './frontend/Admin';
+import {LandingPage} from './frontend/LandingPage';
+import { AuthProvider, useAuth } from './frontend/AuthContext';
 import BartenderOrders from './frontend/BartenderOrders';
 import { CommonColors } from './frontend/Common';
+import BartendingCompanyScreen from './frontend/BartendingCompanyScreen'
+
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
   const dimensions = useWindowDimensions();
+  const { isAuthenticated, profile } = useAuth();
 
   return (
-    <Drawer.Navigator useLegacyImplementation={false}
-      screenOptions={{
-        drawerType: dimensions.width >= 768 ? 'permanent' : 'front',
-        drawerStyle: {
-          backgroundColor: CommonColors.secondaryBackgroundColor,
-          color: CommonColors.lightTextColor,
-        },
-        headerStyle: {
-          backgroundColor: CommonColors.secondaryBackgroundColor,
-        },
-        drawerLabelStyle: {
-          color: CommonColors.lightTextColor,
-        },
-        drawerActiveBackgroundColor: CommonColors.secondaryButtonColor,
-        sceneContainerStyle: {
-          backgroundColor: CommonColors.primaryBackgroundColor,
-        }
-      }}
-    >
-      <Drawer.Screen name="LandingPage" component={LandingPage}/>
-      <Drawer.Screen name="Login" component={LoginForm} />
-      <Drawer.Screen name="Events" component={EventDiscovery} />
-      <Drawer.Screen name="Bartender Orders" component={BartenderOrders} />
-      <Drawer.Screen name="GuestOrderScreens" component={GuestOrderScreens} />
-      <Drawer.Screen name="Admin" component={Admin} />
-      <Drawer.Screen name="Bartender" component={Admin} />
-      <Drawer.Screen name="Orders" component={Admin} />
-      <Drawer.Screen name="Companies" component={BartendingCompanyScreen} />
-      <Drawer.Screen name="Drinks" component={DrinksScreen} />
-    </Drawer.Navigator>
+      <Drawer.Navigator useLegacyImplementation={false}
+            screenOptions={{
+              drawerType: dimensions.width >= 768 ? 'permanent' : 'front',
+              drawerStyle: {
+                backgroundColor: CommonColors.secondaryBackgroundColor,
+                color: CommonColors.lightTextColor,
+              },
+              headerStyle: {
+                backgroundColor: CommonColors.secondaryBackgroundColor,
+              },
+              drawerLabelStyle: {
+                color: CommonColors.lightTextColor,
+              },
+              drawerActiveBackgroundColor: CommonColors.secondaryButtonColor,
+              sceneContainerStyle: {
+                backgroundColor: CommonColors.primaryBackgroundColor,
+              }
+            }}
+          >
+            <Drawer.Screen name="Home" component={LandingPage}/>
+
+            {isAuthenticated && <>
+              <Drawer.Screen name="Events" component={EventDiscovery} />
+            </>}
+
+            {profile?.role == "admin" && <>
+              <Drawer.Screen name="Admin" component={Admin} />
+              <Drawer.Screen name="Companies" component={BartendingCompanyScreen} />
+            </>}
+
+            {profile?.role == "bartender" && <>
+              <Drawer.Screen name="Bartender" component={Admin} />
+            </>}
+
+            <Drawer.Screen name="Orders" component={BartenderOrders} />
+            
+      </Drawer.Navigator>
   );
 }
 
@@ -89,9 +99,9 @@ function MyDrawer() {
 export default function App() {
   return (
     <NavigationContainer>
-      <CartProvider>
+      <AuthProvider>
         <MyDrawer />
-      </CartProvider>
+      </AuthProvider>
     </NavigationContainer>
   );
 }

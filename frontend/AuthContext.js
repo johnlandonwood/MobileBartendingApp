@@ -14,6 +14,10 @@ const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [profile, setProfile] = useState(null);
 
+  const signInWithEmailAndPassword = async (email, pw) => {
+    
+  };
+
   const logout = async () => {
     await SecureStore.deleteItemAsync('authToken');
     await SecureStore.deleteItemAsync('userProfile');

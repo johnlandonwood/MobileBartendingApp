@@ -12,6 +12,9 @@ import * as SecureStore from 'expo-secure-store';
 import { api } from './api';
 
 import {useAuth} from './AuthContext';
+import { TextInput, StatusBar } from 'react-native';
+
+import {CommonStyles } from './Common';
 
 
 const Stack = createStackNavigator();
@@ -83,7 +86,7 @@ const LandingScreen = ({ navigation }) => {
       ) : (
         <>
             <CustomButton title="Create Account" onPress={() => navigation.navigate('EmailRegistrationScreen')}/>
-            <CustomButton title="Sign In" onPress={() => navigation.navigate('SignIn')}/>
+            <CustomButton title="Sign In" onPress={() => navigation.navigate('SignInEmail')}/>
             <CustomButton title="Sign In with Google" onPress={() => handleSignUp('google')}>
               <FontAwesome name="google" size={20} color="white" />
             </CustomButton>
@@ -98,21 +101,70 @@ const LandingPage = () => {
     <Stack.Navigator>
       <Stack.Screen name="Landing" component={LandingScreen} />
       <Stack.Screen name="EmailRegistrationScreen" component={EmailRegistrationScreen} />
+      <Stack.Screen name="SignInEmail" component={SignInEmail} />
     </Stack.Navigator>
   );
 };
 
 
+const SignInEmail = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { signInWithEmailAndPassword } = useAuth();
+
+  const handleSignIn = async () => {
+    try {
+      await signInWithEmailAndPassword(email, password);
+      navigation.goBack();
+    } catch (error) {
+      console.error('Sign in failed:', error);
+    }
+  };
+
+  return (
+    <View styles={styles.columnContainer}>
+      {/* <Text styles={styles.title}>Sign In with Email</Text> */}
+      <View styles={styles.rowContainer}>
+        <TextInput
+          style={CommonStyles.input}
+          placeholder="Email"
+          keyboardType="email-address"
+          onChangeText={setEmail}
+          value={email}
+        />
+      </View>
+      <View styles={styles.rowContainer}>
+        <TextInput
+          style={CommonStyles.input}
+          placeholder="Password"
+          secureTextEntry
+          onChangeText={setPassword}
+          value={password}
+        />
+      </View>
+      <CustomButton title="Sign In" onPress={handleSignIn} />
+    </View>
+  );
+};
+
+
+
 const styles = StyleSheet.create({
+  columnContainer: {
+      marginTop: StatusBar.currentHeight || 0,
+      flex: 1,
+      flexDirection: "column",
+  },
+  rowContainer: {
+      flex: 1, 
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center"
+  },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  signupButtonsContainer: {
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    width: '100%',
   },
 });
 

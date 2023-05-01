@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema ({
     role: {
         type: String,
         required: true,
-        enum: ['admin', 'company_owner', 'bartender']
+        enum: ['admin', 'company_owner', 'bartender', 'user']
     },
     dob: {
         type: Date,
@@ -46,9 +46,17 @@ const userSchema = new mongoose.Schema ({
     },
     password: {
         type: String,
-        required: true,
         minlength: 8
-    },    
+    },
+    provider: {
+        type: String,
+        required: true,
+        enum: ['local', 'google']
+    },
+    google: {
+        id: String,
+        picture: String,
+    },
 });
 
 
@@ -59,10 +67,12 @@ userSchema.methods.hashPassword = async function(password) {
 
 // Add this pre-save hook to hash the password before saving
 userSchema.pre('save', async function(next) {
-    if (this.isModified('password')) {
+    if (this.provider === 'local' && this.isModified('password')) {
         this.password = await this.hashPassword(this.password);
     }
     next();
 });
+
+
 
 export default mongoose.models?.User || mongoose.model('User', userSchema)

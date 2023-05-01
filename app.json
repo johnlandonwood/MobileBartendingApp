@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "MobileBartendingApp",
-    "slug": "test-project",
+    "slug": "barpal",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.swvault.barpal"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,6 +29,13 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "scheme": "barpal",
+    "extra": {
+      "eas": {
+        "projectId": "2d3e09d3-7c73-4dab-bbe7-1dbe6e91cffb"
+      }
+    },
+    "owner": "cerpa"
   }
 }

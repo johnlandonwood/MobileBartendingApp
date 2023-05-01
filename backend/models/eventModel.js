@@ -13,6 +13,10 @@ const eventSchema = new mongoose.Schema ({
         required: true,
         trim: true
     },
+    description: {
+        type: String,
+        trim: true
+    },
     company: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'BartendingCompany',
@@ -21,6 +25,9 @@ const eventSchema = new mongoose.Schema ({
         type: [Number],
         required: true,
         index: '2dsphere'
+    },
+    radius: {
+        type: Number,
     },
     start_time: {
         type: Date,

@@ -22,7 +22,7 @@ import * as Location from 'expo-location';
 
 import { getDistance } from 'geolib';
 
-import { ENDPOINT } from './api/Util';
+import { API_BASE_URL } from './api';
 
 
 const Stack = createStackNavigator();
@@ -103,7 +103,7 @@ const EventDiscovery = ({ route, navigation }) => {
       setLoading(true);
       try {
           const locationQuery = location ? `&latitude=${location.latitude}&longitude=${location.longitude}` : '';
-          const requestUrl = `${ENDPOINT}/api/events?page=${page}&limit=10${locationQuery}`;
+          const requestUrl = `${API_BASE_URL}/api/events?page=${page}&limit=10${locationQuery}`;
           console.log(requestUrl);
           const response = await fetch(requestUrl);
           if (!response.ok) {

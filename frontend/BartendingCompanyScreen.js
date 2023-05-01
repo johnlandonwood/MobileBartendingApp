@@ -89,6 +89,7 @@ const BartendingCompanyScreen = () => {
   
       formData.append('name', name);
       formData.append('email', email);
+      // TODO: update this to the current user.
       formData.append('admin', '642ca8ea1b88eb85831f97a8')
   
       const requestOptions = {

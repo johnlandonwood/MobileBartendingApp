@@ -2,8 +2,8 @@ import express from "express";
 import { query, body, param, validationResult } from "express-validator";
 import BartendingCompany from "../models/bartendingCompanyModel.js";
 
-import { upload } from "../../upload.js";
-import { blobServiceClient } from "../../azureBlobStorage.js";
+import { upload } from "../upload.js";
+import { blobServiceClient } from "../azureBlobStorage.js";
 
 import { handleValidationErrors, deleteOldImages, uploadImage } from "./routesUtil.js";
 

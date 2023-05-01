@@ -4,25 +4,17 @@ import express from "express";
 
 dotenv.config();
 
-// import passport from "passport";
-// import { BearerStrategy } from "passport-azure-ad";
-// import { Jwt } from "jsonwebtoken";
+// import passport from 'passport';
+// import LocalStrategy from 'passport-local';
+// import GoogleStrategy from 'passport-google-oauth20';
+// import bcrypt from 'bcrypt';
+// import User from './src/models/userModel.js';
+// import session from "express-session";
+// import { MemoryStore } from "express-session";
 
-
-import { eventRoutes } from './src/routes/events.js';
-import { bartendingCompanyRoutes } from './src/routes/companies.js';
-
-
-// const options = {
-//   identityMetadata: `https://${process.env.B2C_TENANT_NAME}.b2clogin.com/${process.env.B2C_TENANT_NAME}.onmicrosoft.com/${process.env.B2C_POLICY_NAME}/v2.0/.well-known/openid-configuration`,
-//   clientID: process.env.APP_CLIENT_ID,
-//   policyName: process.env.B2C_POLICY_NAME,
-//   isB2C: true,
-//   validateIssuer: true,
-//   loggingLevel: 'info',
-//   passReqToCallback: false
-// };
-
+import { eventRoutes } from './routes/events.js';
+import { bartendingCompanyRoutes } from './routes/companies.js';
+import { userRoutes } from './routes/users.js';
 
 
 const PORT = 8080;
@@ -40,15 +32,79 @@ mongoose.connect("mongodb://"+process.env.COSMOSDB_HOST+":"+process.env.COSMOSDB
  retryWrites: false
  })
  .then(() => {
-    console.log('Connection to CosmosDB successful')
+    console.log('Connection to CosmosDB successful');
     const app = express();
 
-    app.use(express.json())
-    app.use(express.urlencoded({extended: true}))
-    app.use('/api/', eventRoutes)
-    app.use('/api/companies/', bartendingCompanyRoutes)
+    app.use(express.json());
+    app.use(express.urlencoded({extended: true}));
+
+    // let sess = {
+    //   secret: process.env.SESSION_SECRET,
+    //   cookie: {
+    //     name: 'barpal.sid', // Use custom cookie name
+    //     maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    //     secure: false, // Set to true in production
+
+    //   },
+    //   resave: false,
+    //   saveUninitialized: true,
+
+    //   store: new MemoryStore(),
+    // }
+    
+    // if (app.get('env') === 'production') {
+    //   sess.cookie.secure = true // serve secure cookies
+    // }
+    
+    // app.use(session(sess))
+
+    // Configure Passport with the Local strategy
+    // passport.use(
+    //     new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
+    //         try {
+    //             const user = await User.findOne({ email });
+    //             if (!user) {
+    //                 return done(null, false, { message: 'Invalid email or password' });
+    //             }
+
+    //             const isPasswordValid = await bcrypt.compare(password, user.password);
+    //             if (!isPasswordValid) {
+    //                 return done(null, false, { message: 'Invalid email or password' });
+    //             }
+
+    //             return done(null, user);
+    //         } catch (error) {
+    //             done(error);
+    //         }
+    //     })
+    // );
+
+    // // Configure Passport session support
+    // passport.serializeUser((user, done) => {
+    //     done(null, user.id);
+    // });
+
+    // passport.deserializeUser(async (id, done) => {
+    //     try {
+    //         const user = await User.findById(id);
+    //         done(null, user);
+    //     } catch (error) {
+    //         done(error);
+    //     }
+    // });
+
+
+    // // Set up Passport middleware
+    // app.use(passport.initialize());
+    // app.use(passport.session());
+
+    app.use('/', userRoutes);
+    app.use('/api/', eventRoutes);
+    app.use('/api/companies/', bartendingCompanyRoutes);
+
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     })
  })
+
  .catch((err) => console.error(err));

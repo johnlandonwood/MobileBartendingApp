@@ -45,7 +45,7 @@ const LandingScreen = ({ navigation }) => {
           console.log('Authenticated successfully');
           // Store the JWT token using expo-secure-store
           console.log("res.data:", res.data);
-          handleAuthResponse(res);
+          await handleAuthResponse(res);
           checkAuth();
         })
         .catch((error) => {

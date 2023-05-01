@@ -13,6 +13,7 @@ import { Button, Image, ListItem, Icon, Input } from '@rneui/base';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
+import { useAuth } from './AuthContext';
 
 
 const API_BASE_URL = 'http://localhost:8080/api'; // Replace with your API base URL

@@ -1,13 +1,15 @@
 import 'react-native-gesture-handler';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Switch, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, Switch, useWindowDimensions, StatusBar } from 'react-native';
 import LoginForm from './frontend/LoginForm';
 import EventDiscovery from './frontend/EventDiscovery';
 import Admin from './frontend/Admin';
+import GuestOrderScreens from './frontend/GuestOrderScreens';
 import ItemList from './frontend/ItemList';
 import ItemDetails from './frontend/ItemDetails';
 import CartSummary from './frontend/CartSummary';
 import LandingPage from './frontend/LandingPage';
+import DrinksScreen from './frontend/DrinksScreen';
+import BartendingCompanyScreen from './frontend/BartendingCompanyScreen';
 import { CartProvider } from './frontend/context/CartContext';
 import {
   BrowserRouter as Router,
@@ -43,9 +45,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import BartenderOrders from './frontend/BartenderOrders';
 import { CommonColors } from './frontend/Common';
-
-import BartendingCompanyScreen from './frontend/BartendingCompanyScreen';
-
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -71,17 +70,16 @@ function MyDrawer() {
         }
       }}
     >
-      <Drawer.Screen name="ItemList" component={ItemList} />
-      <Drawer.Screen name="ItemDetails" component={ItemDetails} />
-      <Drawer.Screen name="CartSummary" component={CartSummary} />
-      {/* <Drawer.Screen name="LandingPage" component={LandingPage}/>
+      <Drawer.Screen name="LandingPage" component={LandingPage}/>
       <Drawer.Screen name="Login" component={LoginForm} />
       <Drawer.Screen name="Events" component={EventDiscovery} />
       <Drawer.Screen name="Bartender Orders" component={BartenderOrders} />
+      <Drawer.Screen name="GuestOrderScreens" component={GuestOrderScreens} />
       <Drawer.Screen name="Admin" component={Admin} />
       <Drawer.Screen name="Bartender" component={Admin} />
       <Drawer.Screen name="Orders" component={Admin} />
-      <Drawer.Screen name="Companies" component={BartendingCompanyScreen} /> */}
+      <Drawer.Screen name="Companies" component={BartendingCompanyScreen} />
+      <Drawer.Screen name="Drinks" component={DrinksScreen} />
     </Drawer.Navigator>
   );
 }

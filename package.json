@@ -36,6 +36,8 @@
     "email-validator": "^2.0.4",
     "expo": "~47.0.6",
     "expo-checkbox": "~2.2.2",
+    "expo-file-system": "~15.1.1",
+    "expo-image-picker": "~14.0.2",
     "expo-location": "~15.0.1",
     "expo-status-bar": "~1.4.2",
     "express-handlebars": "^6.0.7",
@@ -56,9 +58,7 @@
     "react-native-simple-stepper": "^4.0.1",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.9",
-    "react-router-dom": "^6.7.0",
-    "expo-image-picker": "~14.0.2",
-    "expo-file-system": "~15.1.1"
+    "react-router-dom": "^6.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

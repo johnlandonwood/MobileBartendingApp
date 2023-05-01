@@ -10,8 +10,6 @@ export const CartProvider = ({children}) => {
         setCart
     }), [cart]);
 
-    console.log("this the cart", cart);
-
     const addToCart = (item, qty, additionalNotes) => {
         let found = cart.filter(x => x._id === item._id);
         if(found.length == 0){

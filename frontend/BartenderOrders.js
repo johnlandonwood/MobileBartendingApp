@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet, Text, StatusBar, TouchableOpacity, } from 'react-native';
 import { CustomButton } from './CustomButton';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faBeer, faWineGlass, faWhiskeyGlass } from '@fortawesome/free-solid-svg-icons';
+import { faBeer, faWineGlass, faWhiskeyGlass, faMartiniGlass, faGlassWater } from '@fortawesome/free-solid-svg-icons';
 import { getOrders } from './api/bartenderOrders';
 
 const sortOrder = ['Claimed/Preparing', 'Unclaimed', 'Ready for Pickup']
@@ -118,14 +118,20 @@ const BartenderOrders = () => {
             <Text style={{textAlign: 'center'}}>Placed by: {selectedOrder.placedBy}</Text>
             <View style={styles.drink}>
               <View style={styles.drinkInline}>
-                {selectedOrder.drink1.type === "beer" && 
+                {selectedOrder.drink1.category === "Beer" && 
                   <FontAwesomeIcon icon={faBeer} size={32} style={styles.icon}/>
                 }
-                {selectedOrder.drink1.type === "wine" && 
+                {selectedOrder.drink1.category === "Wine" && 
                   <FontAwesomeIcon icon={faWineGlass} size={32} style={styles.icon}/>
                 }
-                {selectedOrder.drink1.type === "cocktail" && 
+                {selectedOrder.drink1.category === "Mixed Drink" && 
+                  <FontAwesomeIcon icon={faMartiniGlass} size={32} style={styles.icon}/>
+                }
+                {selectedOrder.drink1.category === "Liquor" && 
                   <FontAwesomeIcon icon={faWhiskeyGlass} size={32} style={styles.icon}/>
+                }
+                {selectedOrder.drink1.category === "Non-Alcoholic" && 
+                  <FontAwesomeIcon icon={faGlassWater} size={32} style={styles.icon}/>
                 }
                 <Text style={styles.drinkName}>{selectedOrder.drink1.name}</Text>
                 <Text style={styles.quantity}>x{selectedOrder.drink1.quantity}</Text>
@@ -135,13 +141,13 @@ const BartenderOrders = () => {
             {selectedOrder.drink2.quantity !== 0 && 
               <View style={styles.drink}>
                 <View style={styles.drinkInline}>
-                  {selectedOrder.drink2.type === "beer" && 
+                  {selectedOrder.drink2.category === "beer" && 
                     <FontAwesomeIcon icon={faBeer} size={32} style={styles.icon}/>
                   }
-                  {selectedOrder.drink2.type === "wine" && 
+                  {selectedOrder.drink2.category === "wine" && 
                     <FontAwesomeIcon icon={faWineGlass} size={32} style={styles.icon}/>
                   }
-                  {selectedOrder.drink2.type === "cocktail" && 
+                  {selectedOrder.drink2.category === "cocktail" && 
                     <FontAwesomeIcon icon={faWhiskeyGlass} size={32} style={styles.icon}/>
                   }
                   <Text style={styles.drinkName}>{selectedOrder.drink2.name}</Text>

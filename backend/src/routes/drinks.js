@@ -1,6 +1,5 @@
 import express from "express";
 import { query, body, param, validationResult } from "express-validator";
-import BartendingCompany from "../models/bartendingCompanyModel.js";
 
 import { upload } from "../../upload.js";
 import { blobServiceClient } from "../../azureBlobStorage.js";
@@ -14,15 +13,15 @@ const containerName = 'drink-images';
 
 // Validation rules
 const drinkValidationRules = [
-    body('name').notEmpty().withMessage('Name is required'),
+    body('item_name').notEmpty().withMessage('Name is required'),
     body('price').isNumeric().withMessage('Price must be a number'),
-    body('company')
-        .notEmpty()
-        .withMessage('Company is required')
-        .isMongoId()
-        .withMessage('Company must be a valid ObjectId'),
+    // body('company')
+    //     .notEmpty()
+    //     .withMessage('Company is required')
+    //     .isMongoId()
+    //     .withMessage('Company must be a valid ObjectId'),
     body('description').notEmpty().withMessage('Description is required'),
-    body('category').isIn(['beer', 'wine', 'non-alcoholic']).withMessage('Invalid category'),
+    // body('category').isIn(['beer', 'wine', 'non-alcoholic']).withMessage('Invalid category'),
 ];
 
 // Create a drink item
@@ -51,10 +50,10 @@ router.post('/',
 const drinkItemFilterRules = [
     query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
     query('limit').optional().isInt({ min: 1 }).withMessage('Limit must be a positive integer'),
-    query('name').optional().trim().escape(),
-    query('company').optional().notEmpty().isMongoId().withMessage('Company must be a valid ObjectId'),
-    query('minPrice').optional().isNumeric().withMessage('minPrice must be a number'),
-    query('maxPrice').optional().isNumeric().withMessage('maxPrice must be a number'),
+    // query('name').optional().trim().escape(),
+    // query('company').optional().notEmpty().isMongoId().withMessage('Company must be a valid ObjectId'),
+    // query('minPrice').optional().isNumeric().withMessage('minPrice must be a number'),
+    // query('maxPrice').optional().isNumeric().withMessage('maxPrice must be a number'),
 ];
 
 
@@ -67,33 +66,34 @@ router.get(
         const {
             page = 1,
             limit = 10,
-            name,
-            company,
-            minPrice,
-            maxPrice,
+            // name,
+            // company,
+            // minPrice,
+            // maxPrice,
         } = req.query;
 
 
-        // Convert page and limit to numbers
+        // // Convert page and limit to numbers
         const pageNumber = parseInt(page);
         const limitNumber = parseInt(limit);
         
-        const filter = {};
-        if (name) filter.name = name;
-        if (company) filter.company = company;
+        // const filter = {};
+        // if (name) filter.name = name;
+        // if (company) filter.company = company;
 
-        if (minPrice !== undefined && maxPrice !== undefined) {
-            filter.price = { $gte: minPrice, $lte: maxPrice };
-          } else if (minPrice !== undefined) {
-            filter.price = { $gte: minPrice };
-          } else if (maxPrice !== undefined) {
-            filter.price = { $lte: maxPrice };
-          }
+        // if (minPrice !== undefined && maxPrice !== undefined) {
+        //     filter.price = { $gte: minPrice, $lte: maxPrice };
+        //   } else if (minPrice !== undefined) {
+        //     filter.price = { $gte: minPrice };
+        //   } else if (maxPrice !== undefined) {
+        //     filter.price = { $lte: maxPrice };
+        //   }
 
         try {
-            const drinkItems = await DrinkItem.find(filter)
-                .skip((pageNumber - 1) * limitNumber)
-                .limit(limitNumber);
+            const drinkItems = await DrinkItem.find({}).skip((pageNumber - 1) * limitNumber).limit(limitNumber);
+            // .find(filter)
+            //     .skip((pageNumber - 1) * limitNumber)
+            //     .limit(limitNumber);
             res.json(drinkItems);
         } catch (error) {
             res.status(500).json({ error: error.message });

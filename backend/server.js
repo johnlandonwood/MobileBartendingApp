@@ -12,6 +12,7 @@ import { eventRoutes } from './src/routes/events.js';
 import { bartendingCompanyRoutes } from './src/routes/companies.js';
 import { drinkListRoutes } from "./src/routes/drinklists.js";
 import { drinkRoutes } from "./src/routes/drinks.js";
+import { bartenderOrderRoutes } from "./src/routes/bartenderOrderRoutes.js";
 
 
 // const options = {
@@ -64,12 +65,14 @@ mongoose.connect(uri
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
       next();
     });
+    app.use(cors());
     app.use(express.json())
     app.use(express.urlencoded({extended: true}))
     app.use('/api/drinklists/', drinkListRoutes);
     app.use('/api/drinks/', drinkRoutes);
-    // app.use('/api/', eventRoutes)
-    // app.use('/api/companies/', bartendingCompanyRoutes)
+    app.use('/api/', eventRoutes);
+    app.use('/api/orders', bartenderOrderRoutes);
+    app.use('/api/companies/', bartendingCompanyRoutes)
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     })

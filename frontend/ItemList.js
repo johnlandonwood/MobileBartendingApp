@@ -3,29 +3,6 @@ import {View, Text, Button, TextInput, FlatList, StyleSheet, TouchableOpacity, S
 import { useState, useEffect } from 'react';
 import { getDrinkList } from './api/DrinkLists';
 import ItemCard from './ItemCard';
-import { StackActions } from '@react-navigation/native';
-import axios from 'axios';
-import NavigationContainer from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { create } from 'express-handlebars';
-import { createStackNavigator } from '@react-navigation/stack';
-import ItemDetails from './ItemDetails';
-
-// const Stack = createStackNavigator();
-
-// function MyStack() {
-//   const dimensions = useWindowDimensions();
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator>
-//         <Stack.Screen
-//           name="ItemDetails"
-//           component={ItemDetails}
-//         />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   )
-// }
 
 const beer_addons = [];
 const wine_addons = [];
@@ -55,7 +32,7 @@ const ItemList = ({navigation}) => {
 
     return <>
         <View style={styles.wrapper}>
-            <View style={styles.topWrapper}>
+            {/* <View style={styles.topWrapper}>
                 <View style={styles.textInputWrapper}>
                     <TextInput 
                     style={styles.textInput}
@@ -72,8 +49,8 @@ const ItemList = ({navigation}) => {
                         title="Go"
                         color="#c53c3c"
                     /> */}
-                </View>
-            </View>
+                {/* </View> */}
+            {/* </View> */}
             <SectionList
               sections={drinkList}
               keyExtractor={(item, index) => item + index}
@@ -96,7 +73,7 @@ const ItemList = ({navigation}) => {
             />
         </View>
     
-    </>;
+    </>
 };
 
 const styles = StyleSheet.create({

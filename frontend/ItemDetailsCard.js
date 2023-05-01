@@ -1,13 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
 import {View, Text, Image, Button, Dimensions, StyleSheet, TextInput} from 'react-native';
-import { SelectList } from 'react-native-dropdown-select-list';
 import SimpleStepper from 'react-native-simple-stepper';
+import { CustomButton } from './CustomButton';
 const screenWidth = Dimensions.get('window').width;
 
 const ItemDetailsCard = ({item, qty, qtyChanged, addToCart}) => {
-  const [additionalNotes, onChangeText] = React.useState('');
-  const [iceSelected, setIceSelected] = React.useState("");
+  const [additionalNotes, onChangeText] = useState('');
+  const [iceSelected, setIceSelected] = useState("");
   console.log(qty);
   console.log(additionalNotes);
 
@@ -80,13 +80,9 @@ const ItemDetailsCard = ({item, qty, qtyChanged, addToCart}) => {
       </View>
 
       <View style={styles.itemContainer}>
-        <Button
-          onPress={() => {
-            addToCart(item, qty, additionalNotes);
-          }}
-          title="Add to Basket"
-          color="#c53c3c"
-        />
+      <CustomButton title="Add to Basket" onPress={() => {
+                addToCart(item, qty, additionalNotes);
+        }}></CustomButton>
       </View>
     </View>
     </>;

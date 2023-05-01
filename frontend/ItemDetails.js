@@ -3,6 +3,8 @@ import { useContext, useState } from 'react';
 import {View, Button, Alert} from 'react-native';
 import ItemDetailsCard from './ItemDetailsCard';
 import { CartContext } from './context/CartContext';
+import { StackActions } from '@react-navigation/native';
+import { CustomButton } from './CustomButton';
 
 const ItemDetails = ({route, navigation}) => {
   const cartContext = useContext(CartContext);
@@ -31,6 +33,14 @@ const ItemDetails = ({route, navigation}) => {
         qtyChanged={qtyChanged}
         addToCart={addToCart}
       />
+      <CustomButton title="Go Back" onPress={() => {
+                navigation.dispatch(StackActions.popToTop());
+        }}>
+      </CustomButton>
+      <CustomButton title="View Cart" onPress={() => {
+                navigation.navigate('CartSummary');
+        }}>
+      </CustomButton>
     </>;
 };
 

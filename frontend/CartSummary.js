@@ -3,10 +3,11 @@ import { useContext, useState } from 'react';
 import {View, Button, Alert, StyleSheet, FlatList, Text} from 'react-native';
 import ItemDetailsCard from './ItemDetailsCard';
 import { CartContext } from './context/CartContext';
+import { placeOrder } from './api/bartenderOrders';
 
 function sumofArray(sum, num) {
     return sum + num;
-  }
+}
   
 const getSubTotal = items => {
     if (items.length) {
@@ -16,12 +17,12 @@ const getSubTotal = items => {
     return 0;
 };
 
+const API_BASE_URL = 'http://localhost:4000/api'; // Replace with your API base URL
+
 const CartSummary = ({route, navigation}) => {
     const cartContext = useContext(CartContext);
 
     const subtotal = getSubTotal(cartContext.context.cart);
-//   const placeOrder = () => {
-//   };
     const renderCartItem = ({item}) => {
         return <>
             <View style={styles.cartItemContainer}>
@@ -37,7 +38,8 @@ const CartSummary = ({route, navigation}) => {
         </>;
     };
 
-    console.log(cartContext);
+    console.log("cartContext", cartContext);
+    console.log("cartContext.context.cart",cartContext.context.cart);
     return <>
       <View style={styles.wrapper}>
         <View style={styles.cartItemsContainer}>
@@ -79,7 +81,7 @@ const CartSummary = ({route, navigation}) => {
             <Button
               onPress={() => {
                 console.log("pressed");
-                // this.placeOrder()
+                placeOrder(cartContext.context.cart);
             }}
               title="Place Order"
               color="#c53c3c"

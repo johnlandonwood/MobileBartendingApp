@@ -4,18 +4,19 @@ import bartenderOrder from '../models/bartenderOrderModel.js';
 const router = express.Router();
 
 
-router.post("/orders", async (req, res) => {
+router.post("/", async (req, res) => {
 
     const newOrder = new bartenderOrder( {
-            title: req.body.title,
-            timePlaced: req.body.timePlaced,
-            placedBy: req.body.placedBy,
-            drink1: req.body.drink1,
-            drink2: req.body.drink2,
-            status: req.body.status,
-            timeFulfilled: req.body.timeFulfilled
+            // title: req.body.title,
+            // timePlaced: req.body.timePlaced,
+            // placedBy: req.body.placedBy,
+            drinks: req.body.drinks,
+            // status: req.body.status,
+            // timeFulfilled: req.body.timeFulfilled
         }
     );
+
+    console.log(newOrder.drinks);
 
     var date = new Date(newOrder.timePlaced);
     const placed = date.toLocaleTimeString('en-US', { 
@@ -23,11 +24,13 @@ router.post("/orders", async (req, res) => {
         minute: "numeric"
     })
     newOrder.timePlaced = placed;
+    newOrder.status = "Unclaimed";
+    newOrder.placedBy = "Maria Harrison";
 
     try {
         console.log("Creating order");
-        const savedOrder = await newOrder.save();
-        res.status(201).send(savedOrder);
+        await newOrder.save();
+        res.send(newOrder);
 
     } catch (error) {
         res.status(500).json({ message: 'Error creating order', error: error });
@@ -35,7 +38,7 @@ router.post("/orders", async (req, res) => {
 
 });
 
-router.get("/orders", async (req, res) => {
+router.get("/", async (req, res) => {
 
     const filter = {};
 

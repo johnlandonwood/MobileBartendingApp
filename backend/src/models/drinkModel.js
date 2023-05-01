@@ -10,11 +10,6 @@ const drinkItemModel = new mongoose.Schema ({
         type: String,
         trim: true
     },
-    // imageUrl: {
-    //     type: String,
-    //     // required: true,
-    //     trim: true,
-    // },
     price: {
         type: Number,
         required: true,
@@ -24,6 +19,10 @@ const drinkItemModel = new mongoose.Schema ({
         required: true,
         trim: true,
         enum: ['Beer', 'Wine', 'Liquor', 'Mixed Drink', 'Non-Alcoholic']
+    },
+    imageUrl: {
+        type: String,
+        trim: true,
     },
     // company: {
     //     type: mongoose.Schema.Types.ObjectId,

@@ -14,7 +14,7 @@ import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
 
 
-const API_BASE_URL = 'http://localhost:8080/api'; // Replace with your API base URL
+const API_BASE_URL = 'http://localhost:4000/api'; // Replace with your API base URL
 
 const BartendingCompanyScreen = () => {
   const [companies, setCompanies] = useState([]);

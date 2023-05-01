@@ -15,7 +15,6 @@ router.post("/", async (req, res) => {
             // timeFulfilled: req.body.timeFulfilled
         }
     );
-
     console.log(newOrder.drinks);
 
     var date = new Date(newOrder.timePlaced);
@@ -25,7 +24,8 @@ router.post("/", async (req, res) => {
     })
     newOrder.timePlaced = placed;
     newOrder.status = "Unclaimed";
-    newOrder.placedBy = "Maria Harrison";
+    newOrder.placedBy = "Genny Wood";
+    newOrder.title = "Order 7";
 
     try {
         console.log("Creating order");

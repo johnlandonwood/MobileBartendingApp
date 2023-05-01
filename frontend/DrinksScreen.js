@@ -24,9 +24,8 @@ const DrinksScreen = () => {
     const [currentItem, setCurrentItem] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
     const [description, setDescription] = useState('');
-    const [price, setPrice] = useState('');
+    const [price, setPrice] = useState(0);
     const [category, setCategory] = useState('');
     const [logoUri, setLogoUri] = useState(null);
 
@@ -35,7 +34,7 @@ const DrinksScreen = () => {
       {key:'2', value:'Wine'},
       {key:'3', value:'Liquor'},
       {key:'4', value:'Mixed Drink'},
-
+      {key:'5', value:'Non-Alcoholic'},
     ];
 
     const [page, setPage] = useState(1);
@@ -104,8 +103,6 @@ const DrinksScreen = () => {
       formData.append('description', description);
       formData.append('price', price);
       formData.append('category', category);
-      formData.append('email', email);
-      formData.append('admin', '642ca8ea1b88eb85831f97a8')
   
       const requestOptions = {
         method: isEditing ? 'PUT' : 'POST',
@@ -166,8 +163,8 @@ const DrinksScreen = () => {
     setModalVisible(true);
   };
 
-  const renderItem = ({ item }) => (
-    <ListItem bottomDivider onPress={() => openModal(item, true)}>
+  const renderItem = ({ item, index }) => (
+    <ListItem bottomDivider key={index} onPress={() => openModal(item, true)}>
       <Image
         source={{ uri: item.logoUrl }}
         style={styles.logo}
@@ -231,12 +228,6 @@ const DrinksScreen = () => {
       data={data}
       save="value"
       />
-    {/* <Input
-            label="Category"
-            value={category}
-            onChangeText={setCategory}
-            placeholder="Drink Category"
-            /> */}
     {logoUri ? (
     <Image source={{ uri: logoUri }} style={styles.logoPreview} />
     ) : (

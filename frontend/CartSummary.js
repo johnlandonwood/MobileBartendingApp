@@ -4,6 +4,8 @@ import {View, Button, Alert, StyleSheet, FlatList, Text} from 'react-native';
 import ItemDetailsCard from './ItemDetailsCard';
 import { CartContext } from './context/CartContext';
 import { placeOrder } from './api/bartenderOrders';
+import { CustomButton } from './CustomButton';
+import { StackActions } from '@react-navigation/native';
 
 function sumofArray(sum, num) {
     return sum + num;
@@ -69,6 +71,10 @@ const CartSummary = ({route, navigation}) => {
             </View>
           )}
         </View>
+        <CustomButton title="Go Back" onPress={() => {
+                navigation.dispatch(StackActions.popToTop());
+        }}>
+        </CustomButton>
 
         {subtotal == 0 && (
           <View style={styles.messageBox}>
@@ -78,14 +84,14 @@ const CartSummary = ({route, navigation}) => {
 
         {subtotal > 0 && (
           <View style={styles.buttonContainer}>
-            <Button
+            <CustomButton
               onPress={() => {
                 console.log("pressed");
                 placeOrder(cartContext.context.cart);
+                cartContext.context.setCart([]);
             }}
               title="Place Order"
-              color="#c53c3c"
-            />
+            ></CustomButton>
           </View>
         )}
       </View>

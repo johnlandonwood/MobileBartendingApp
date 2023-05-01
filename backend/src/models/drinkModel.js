@@ -20,7 +20,7 @@ const drinkItemModel = new mongoose.Schema ({
         trim: true,
         enum: ['Beer', 'Wine', 'Liquor', 'Mixed Drink', 'Non-Alcoholic']
     },
-    imageUrl: {
+    logoUrl: {
         type: String,
         trim: true,
     },

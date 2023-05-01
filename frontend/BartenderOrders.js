@@ -112,33 +112,43 @@ const BartenderOrders = () => {
           <Text style={styles.selectPrompt}>Select an order from the queue to view it.</Text>
         }
         {selectedOrder !== undefined &&
-           <View>
-            <Text style={styles.title}>{selectedOrder.title}</Text>
-            <Text style={{textAlign: 'center'}}>Time placed: {selectedOrder.timePlaced}</Text>
-            <Text style={{textAlign: 'center'}}>Placed by: {selectedOrder.placedBy}</Text>
-            <View style={styles.drink}>
+          <View>
+          <Text style={styles.title}>{selectedOrder.title}</Text>
+          <Text style={{textAlign: 'center'}}>Time placed: {selectedOrder.timePlaced}</Text>
+          <Text style={{textAlign: 'center'}}>Placed by: {selectedOrder.placedBy}</Text>
+          {selectedOrder.drinks.map((item,index) => { return( 
+            <View style={styles.drink} key={index}>
               <View style={styles.drinkInline}>
-                {selectedOrder.drink1.category === "Beer" && 
+                {item.category === "Beer" && 
                   <FontAwesomeIcon icon={faBeer} size={32} style={styles.icon}/>
                 }
-                {selectedOrder.drink1.category === "Wine" && 
+                {item.category === "Wine" && 
                   <FontAwesomeIcon icon={faWineGlass} size={32} style={styles.icon}/>
                 }
-                {selectedOrder.drink1.category === "Mixed Drink" && 
+                {item.category === "Mixed Drink" && 
                   <FontAwesomeIcon icon={faMartiniGlass} size={32} style={styles.icon}/>
                 }
-                {selectedOrder.drink1.category === "Liquor" && 
+                {item.category === "Liquor" && 
                   <FontAwesomeIcon icon={faWhiskeyGlass} size={32} style={styles.icon}/>
                 }
-                {selectedOrder.drink1.category === "Non-Alcoholic" && 
+                {item.category === "Non-Alcoholic" && 
                   <FontAwesomeIcon icon={faGlassWater} size={32} style={styles.icon}/>
                 }
-                <Text style={styles.drinkName}>{selectedOrder.drink1.name}</Text>
-                <Text style={styles.quantity}>x{selectedOrder.drink1.quantity}</Text>
+                <Text style={styles.name}>{item.item_name}</Text>
+                <Text style={styles.qty}>x{item.qty}</Text>
               </View>
-              <Text style={styles.additionalInstructions}>{selectedOrder.drink1.additionalInstructions}</Text>
+              <Text style={styles.additionalNotes}>{item.additionalNotes}</Text>
             </View>
-            {selectedOrder.drink2.quantity !== 0 && 
+            )})}
+          {selectedOrder.status === "Unclaimed" && 
+              <CustomButton title="Claim Order" onPress={claimOrder}/>
+            }
+            {selectedOrder.status === "Claimed/Preparing" && 
+              <CustomButton title="Mark Ready for Pickup" onPress={readyForPickup}/>
+            }
+           </View>
+          }
+            {/* {selectedOrder.drink2.qty !== 0 && 
               <View style={styles.drink}>
                 <View style={styles.drinkInline}>
                   {selectedOrder.drink2.category === "beer" && 
@@ -150,20 +160,13 @@ const BartenderOrders = () => {
                   {selectedOrder.drink2.category === "cocktail" && 
                     <FontAwesomeIcon icon={faWhiskeyGlass} size={32} style={styles.icon}/>
                   }
-                  <Text style={styles.drinkName}>{selectedOrder.drink2.name}</Text>
-                  <Text style={styles.quantity}>x{selectedOrder.drink2.quantity}</Text>
+                  <Text style={styles.item_name}>{selectedOrder.drink2.name}</Text>
+                  <Text style={styles.qty}>x{selectedOrder.drink2.qty}</Text>
                 </View>
-                <Text style={styles.additionalInstructions}>{selectedOrder.drink2.additionalInstructions}</Text>
+                <Text style={styles.additionalNotes}>{selectedOrder.drink2.additionalNotes}</Text>
               </View>
-            }
-            {selectedOrder.status === "Unclaimed" && 
-              <CustomButton title="Claim Order" onPress={claimOrder}/>
-            }
-            {selectedOrder.status === "Claimed/Preparing" && 
-              <CustomButton title="Mark Ready for Pickup" onPress={readyForPickup}/>
-            }
-           </View>
-        }
+            } */}
+        
       </View>
     </View>
   );
@@ -202,10 +205,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     padding: 5,
   },
-  drinkName: {
+  name: {
     fontWeight: 'bold',
   },
-  additionalInstructions: {
+  additionalNotes: {
     textAlign: 'center',
   },
   selectPrompt: {
@@ -216,7 +219,7 @@ const styles = StyleSheet.create({
   icon: {
     paddingLeft: 50,
   },
-  quantity : {
+  qty : {
     paddingRight: 50,
     fontWeight: 'bold',
   },

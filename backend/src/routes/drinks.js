@@ -8,25 +8,25 @@ import { deleteDBObject, handleValidationErrors, uploadImage } from "./routesUti
 
 const router = express.Router();
 
-const containerName = 'drink-images';
+const containerName = 'items';
 
 
 // Validation rules
 const drinkValidationRules = [
-    body('item_name').notEmpty().withMessage('Name is required'),
-    body('price').isNumeric().withMessage('Price must be a number'),
-    // body('company')
-    //     .notEmpty()
-    //     .withMessage('Company is required')
-    //     .isMongoId()
-    //     .withMessage('Company must be a valid ObjectId'),
-    body('description').notEmpty().withMessage('Description is required'),
+    // body('item_name').notEmpty().withMessage('Name is required'),
+    // body('price').isNumeric().withMessage('Price must be a number'),
+    // // body('company')
+    // //     .notEmpty()
+    // //     .withMessage('Company is required')
+    // //     .isMongoId()
+    // //     .withMessage('Company must be a valid ObjectId'),
+    // body('description').notEmpty().withMessage('Description is required'),
     // body('category').isIn(['beer', 'wine', 'non-alcoholic']).withMessage('Invalid category'),
 ];
 
 // Create a drink item
 router.post('/', 
-    upload.single('image'), // Add the multer middleware for handling file uploads
+    upload.single('logo'), // Add the multer middleware for handling file uploads
     drinkValidationRules,
     handleValidationErrors,
     async (req, res) => {
@@ -35,7 +35,7 @@ router.post('/',
       await drinkItem.save();
 
       if (req.file) {
-        drinkItem.imageUrl = await uploadImage(drinkItem._id, req.file, containerName);
+        drinkItem.logoUrl = await uploadImage(drinkItem._id, req.file, 'items');
         await drinkItem.save();
       }
 
@@ -167,7 +167,7 @@ router.put('/:id',
         let updateData = req.body;
 
         if (req.file) {
-          updateData.logoUrl = await uploadImage(req.params.id, req.file, containerName);
+          updateData.logoUrl = await uploadImage(req.params.id, req.file, 'items');
         }
 
         const drinkItem = await DrinkItem.findByIdAndUpdate(req.params.id, updateData, {

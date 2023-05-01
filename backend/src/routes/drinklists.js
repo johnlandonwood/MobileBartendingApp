@@ -37,7 +37,7 @@ drink_lists_router.get('/:id', async (req, res) => {
 
     for(const [key, value] of Object.entries(items)) {
         try {
-            const drink = await DrinkItem.findById(`${value}`).select('item_name description price category');
+            const drink = await DrinkItem.findById(`${value}`).select('item_name description price category logoUrl');
             // .exec(function (err, item){
             // });
             if(drink.category == "Beer"){

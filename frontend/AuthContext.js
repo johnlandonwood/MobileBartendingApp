@@ -1,8 +1,47 @@
 import { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from './api';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import { Platform } from 'react-native';
+
+const isWeb = Platform.OS === 'web';
+
+export async function setItem(key, value) {
+  if (!isWeb) {
+    await SecureStore.setItemAsync(key, value);
+  } else {
+    await AsyncStorage.setItem(key, value);
+  }
+}
+
+export async function getItem(key) {
+  if (!isWeb) {
+    return await SecureStore.getItemAsync(key);
+  } else {
+    return await AsyncStorage.getItem(key);
+  }
+}
+
+export async function removeItem(key) {
+  if (!isWeb) {
+    await SecureStore.deleteItemAsync(key);
+  } else {
+    await AsyncStorage.removeItem(key);
+  }
+}
+
+export async function handleAuthResponse(response) {
+  await setItem('authToken', response.data.token);
+  await setItem('userProfile', JSON.stringify(response.data.user));
+}
+
+export async function clearAuthData() {
+  await removeItem('authToken');
+  await removeItem('userProfile');
+}
+
 
 const AuthContext = createContext();
 
@@ -25,8 +64,7 @@ const AuthProvider = ({ children }) => {
         dob,
         provider: 'local',
       });
-      await SecureStore.setItemAsync('authToken', res.data.token);
-      await SecureStore.setItemAsync('userProfile', JSON.stringify(res.data.user));
+      await handleAuthResponse(res);
       checkAuth(); // Add this line to update the authentication state and user profile after signing up.
     } catch (error) {
       console.log('Error on sign up:', error);
@@ -37,8 +75,7 @@ const AuthProvider = ({ children }) => {
   const signInWithEmailAndPassword = async (email, pw) => {
     try {
       const res = await api.post('/signin', {email: email, password: pw});
-      await SecureStore.setItemAsync('authToken', res.data.token);
-      await SecureStore.setItemAsync('userProfile', JSON.stringify(res.data.user));
+      await handleAuthResponse(res);
       checkAuth();
     } catch (error) {
       if(error.response){
@@ -52,8 +89,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await SecureStore.deleteItemAsync('authToken');
-    await SecureStore.deleteItemAsync('userProfile');
+    clearAuthData();
     setIsAuthenticated(false);
     setProfile(null);
   };
@@ -66,8 +102,7 @@ const AuthProvider = ({ children }) => {
 
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       const response = await api.get('/api/profile');
-
-      await SecureStore.setItemAsync('userProfile', JSON.stringify(response.data));
+      await setItem('userProfile', JSON.stringify(response.data));
       setProfile(response.data);
     } catch (error) {
       if (error.response) {
@@ -80,8 +115,8 @@ const AuthProvider = ({ children }) => {
   };
 
   const checkAuth = useCallback(async () => {
-    const token = await SecureStore.getItemAsync('authToken');
-    const userProfile = await SecureStore.getItemAsync('userProfile');
+    const token = await getItem('authToken');
+    const userProfile = await getItem('userProfile');
 
     // Add a check for an expired token
     if (token) {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as SecureStore from 'expo-secure-store';
+import { getItem } from './AuthContext';
 import { useEffect } from 'react';
 
 
@@ -11,7 +11,7 @@ const api = axios.create({
 // Add request interceptor to log headers
 api.interceptors.request.use(async (request) => {
   // Add JWT token to the request headers
-  const token = await SecureStore.getItemAsync('authToken');
+  const token = await getItem('authToken');
   if (token) {
     request.headers['Authorization'] = `Bearer ${token}`;
   }

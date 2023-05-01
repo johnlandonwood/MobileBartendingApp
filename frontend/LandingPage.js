@@ -7,7 +7,7 @@ import EmailRegistrationScreen from './EmailRegistrationScreen';
 import * as Google from 'expo-auth-session/providers/google';
 
 import { makeRedirectUri, ResponseType } from 'expo-auth-session';
-import * as SecureStore from 'expo-secure-store';
+import { handleAuthResponse } from './AuthContext';
 
 import { api } from './api';
 
@@ -45,8 +45,7 @@ const LandingScreen = ({ navigation }) => {
           console.log('Authenticated successfully');
           // Store the JWT token using expo-secure-store
           console.log("res.data:", res.data);
-          await SecureStore.setItemAsync('authToken', res.data.token);
-          await SecureStore.setItemAsync('userProfile', JSON.stringify(res.data.user));
+          handleAuthResponse(res);
           checkAuth();
         })
         .catch((error) => {

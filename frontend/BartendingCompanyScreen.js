@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { Button, Image, ListItem, Icon, Input } from '@rneui/base';
 import * as ImagePicker from 'expo-image-picker';
@@ -28,6 +29,8 @@ const BartendingCompanyScreen = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [allLoaded, setAllLoaded] = useState(false);
+
+  const { profile } = useAuth();
 
   const fetchCompanies = async (page) => {
     try {
@@ -80,23 +83,28 @@ const BartendingCompanyScreen = () => {
       if (logoUri) {
         const fileExtension = logoUri.split('.').pop();
         const fileName = `logo.${fileExtension}`;
-        formData.append('logo', {
-          uri: logoUri,
-          type: `image/${fileExtension}`,
-          name: fileName,
-        });
+
+        if(Platform.OS === 'web'){
+          // Fetch the image from the local URI as a Blob
+          const response = await fetch(logoUri);
+          const blob = await response.blob();
+          formData.append('logo', blob, fileName);
+        }
+        else {
+          formData.append('logo', {
+            uri: logoUri,
+            type: `image/${fileExtension}`,
+            name: fileName,
+          });
+        }
       }
   
       formData.append('name', name);
       formData.append('email', email);
-      // TODO: update this to the current user.
-      formData.append('admin', '642ca8ea1b88eb85831f97a8')
+      formData.append('admin', profile?._id ? profile._id : "");
   
       const requestOptions = {
         method: isEditing ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
         body: formData,
       };
   

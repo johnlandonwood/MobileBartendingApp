@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-
 const bartendingCompanySchema = new mongoose.Schema ({
     name: {
         type: String,

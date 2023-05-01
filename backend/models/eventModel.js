@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import userSchema from './userModel.js';
-import bartendingCompanySchema from './bartendingCompanyModel.js';
+// import User from './guestModel.js';
+import BartendingCompany from './bartendingCompanyModel.js';
 
 const eventSchema = new mongoose.Schema ({
     name: {

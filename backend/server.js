@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import express from "express";
+import cors from "cors";
 
 dotenv.config();
 
@@ -19,18 +20,34 @@ import { userRoutes } from './routes/users.js';
 
 const PORT = 8080;
 
-if(process.env.COSMOSDB_DBNAME === undefined)
-  process.env.COSMOSDB_DBNAME = "bartending";
+// if(process.env.COSMOSDB_DBNAME === undefined)
+//   process.env.COSMOSDB_DBNAME = "bartending";
 
-mongoose.connect("mongodb://"+process.env.COSMOSDB_HOST+":"+process.env.COSMOSDB_PORT+"/"+process.env.COSMOSDB_DBNAME, {
-   auth: {
-     username: process.env.COSMOSDB_USER,
-     password: process.env.COSMOSDB_PASSWORD
-   },
- useNewUrlParser: true,
- useUnifiedTopology: true,
- retryWrites: false
- })
+// mongoose.connect("mongodb://"+process.env.COSMOSDB_HOST+":"+process.env.COSMOSDB_PORT+"/"+process.env.COSMOSDB_DBNAME, {
+//    auth: {
+//      username: process.env.COSMOSDB_USER,
+//      password: process.env.COSMOSDB_PASSWORD
+//    },
+//  useNewUrlParser: true,
+//  useUnifiedTopology: true,
+//  retryWrites: false
+//  })
+
+dotenv.config();
+
+const uri = "mongodb://127.0.0.1:27017/bartending";
+
+mongoose.connect(uri
+  // "mongodb://"+process.env.COSMOSDB_HOST+":"+process.env.COSMOSDB_PORT+"/"+process.env.COSMOSDB_DBNAME+"?ssl=true&replicaSet=globaldb", {
+  //  auth: {
+  //    username: process.env.COSMOSDB_USER,
+  //    password: process.env.COSMOSDB_PASSWORD
+  //  },
+//  useNewUrlParser: true,
+//  useUnifiedTopology: true,
+//  retryWrites: false
+//  }
+ )
  .then(() => {
     console.log('Connection to CosmosDB successful');
     const app = express();

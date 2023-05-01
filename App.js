@@ -45,9 +45,6 @@ import {LandingPage} from './frontend/LandingPage';
 import { AuthProvider, useAuth } from './frontend/AuthContext';
 import BartenderOrders from './frontend/BartenderOrders';
 import { CommonColors } from './frontend/Common';
-
-import BartendingCompanyScreen from './frontend/BartendingCompanyScreen';
-
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {

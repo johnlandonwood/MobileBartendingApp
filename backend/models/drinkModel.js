@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const drinkItemModel = new mongoose.Schema ({
-    name: {
+    item_name: {
         type: String,
         required: true,
         trim: true,
@@ -9,11 +9,6 @@ const drinkItemModel = new mongoose.Schema ({
     description: {
         type: String,
         trim: true
-    },
-    imageUrl: {
-        type: String,
-        required: true,
-        trim: true,
     },
     price: {
         type: Number,
@@ -23,12 +18,19 @@ const drinkItemModel = new mongoose.Schema ({
         type: String,
         required: true,
         trim: true,
-        enum: ['beer', 'wine', 'non-alcoholic']
+        enum: ['Beer', 'Wine', 'Liquor', 'Mixed Drink', 'Non-Alcoholic']
     },
-    company: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'BartendingCompany',
+    imageUrl: {
+        type: String,
+        trim: true,
     },
+    // company: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'BartendingCompany',
+    // },
+},
+{
+    collection: 'items'
 });
 
 export default mongoose.models?.DrinkItem || mongoose.model('DrinkItem', drinkItemModel)

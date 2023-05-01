@@ -14,8 +14,41 @@ const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [profile, setProfile] = useState(null);
 
+  const signUpWithEmail = async (email, password, firstName, lastName, role, dob) => {
+    try {
+      const res = await api.post('/register', {
+        email,
+        password,
+        firstName,
+        lastName,
+        role,
+        dob,
+        provider: 'local',
+      });
+      await SecureStore.setItemAsync('authToken', res.data.token);
+      await SecureStore.setItemAsync('userProfile', JSON.stringify(res.data.user));
+      checkAuth(); // Add this line to update the authentication state and user profile after signing up.
+    } catch (error) {
+      console.log('Error on sign up:', error);
+      throw error; // Add this line to throw the error, so it can
+    }
+};  
+
   const signInWithEmailAndPassword = async (email, pw) => {
-    
+    try {
+      const res = await api.post('/signin', {email: email, password: pw});
+      await SecureStore.setItemAsync('authToken', res.data.token);
+      await SecureStore.setItemAsync('userProfile', JSON.stringify(res.data.user));
+      checkAuth();
+    } catch (error) {
+      if(error.response){
+        throw error.response.data.message;
+      }
+      else {
+        console.log("Network sign-in error:", error);
+        throw "Server Error";
+      }
+    }
   };
 
   const logout = async () => {
@@ -84,7 +117,9 @@ const AuthProvider = ({ children }) => {
     profile,
     checkAuth,
     fetchProfile,
-    logout
+    signUpWithEmail,
+    signInWithEmailAndPassword,
+    logout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

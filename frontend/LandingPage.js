@@ -111,19 +111,21 @@ const SignInEmail = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { signInWithEmailAndPassword } = useAuth();
+  const [loginError, setLoginError] = useState('');
 
   const handleSignIn = async () => {
     try {
       await signInWithEmailAndPassword(email, password);
       navigation.goBack();
     } catch (error) {
-      console.error('Sign in failed:', error);
+      console.log('Sign in failed:', error);
+      setLoginError(error);
     }
   };
 
   return (
     <View styles={styles.columnContainer}>
-      {/* <Text styles={styles.title}>Sign In with Email</Text> */}
+      {loginError ? <Text style={styles.errorText}>{loginError}</Text> : null}
       <View styles={styles.rowContainer}>
         <TextInput
           style={CommonStyles.input}
@@ -165,6 +167,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
   },
 });
 

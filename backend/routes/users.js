@@ -12,6 +12,21 @@ const client = new OAuth2Client(googleClientId);
 import jwt from 'jsonwebtoken';
 const jwtSecret = process.env.JWT_SECRET;
 
+const generateToken = (user) => {
+  return jwt.sign(
+    {
+      _id: user._id,
+      email: user.email,
+      role: user.role,
+      provider: user.provider,
+      firstName: user.firstName,
+      lastName: user.lastName
+    },
+    jwtSecret,
+    { expiresIn: '3h' }
+  );
+}
+
 dotenv.config();
 
 const router = express.Router();
@@ -45,22 +60,43 @@ router.post(
             });
 
             await newUser.save();
-            res.status(201).json({ message: 'User registered successfully', user: newUser });
+            const token = generateToken(newUser);
+
+            res.status(201).json({ message: 'User registered successfully', user: newUser, token });
         } catch (error) {
+          console.log("Error on registration:", error);
             res.status(500).json({ message: 'Error registering user', error });
         }
     }
 );
 
-// Local login route
-// router.post('/login', passport.authenticate('local'), (req, res) => {
-//     if(req.user){
-//         res.status(200).json(req.user);
-//     }
-//     else {
-//         res.status(401).json({error: "Authentication failed"});
-//     }
-// });
+router.post('/signin', async (req, res) => {
+  const { email, password } = req.body;
+
+  console.log("sign in request.");
+
+  try {
+    const user = await User.findOne({ email, provider: 'local' });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid email or password.' });
+    }
+
+    const isPasswordValid = await user.comparePassword(password);
+
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: 'Invalid email or password.' });
+    }
+
+    const token = generateToken(user);
+    console.log("signed in.");
+
+    res.status(200).json({ token, user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error.' });
+  }
+});
 
 router.post('/api/auth/google', async (req, res) => {
     try {
@@ -102,19 +138,7 @@ router.post('/api/auth/google', async (req, res) => {
       await user.save();
   
       // Generate an access token.
-      
-      const token = jwt.sign(
-        {
-          _id: user._id,
-          email: user.email,
-          role: user.role,
-          provider: user.provider,
-          firstName: user.firstName,
-          lastName: user.lastName
-        },
-        jwtSecret,
-        { expiresIn: '1h' }
-      );
+      const token = generateToken(user);
   
       res.status(200).json({ token: token, user: { _id: user._id, email: user.email, role: user.role }});
     } catch (error) {

@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema ({
     },
     phone: {
         type: String,
-        unique: true,
+        //unique: true,
         trim: true
     },
     role: {
@@ -64,6 +64,11 @@ userSchema.methods.hashPassword = async function(password) {
     const saltRounds = 10;
     return await bcrypt.hash(password, saltRounds);
 };
+
+userSchema.methods.comparePassword = async function(password) {
+    return await bcrypt.compare(password, this.password);
+  };
+  
 
 // Add this pre-save hook to hash the password before saving
 userSchema.pre('save', async function(next) {
